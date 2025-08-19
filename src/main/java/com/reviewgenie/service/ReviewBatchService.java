@@ -311,8 +311,8 @@ public class ReviewBatchService {
             return "";
         }
         
-        // 1. 이모지 및 특수문자 정리
-        String cleaned = koreanNLPService.cleanText(reviewText);
+        // 1. 이모지 및 특수문자 정리 (cleanText 메서드가 없으므로 직접 구현)
+        String cleaned = reviewText.replaceAll("[^가-힣a-zA-Z0-9\\s]", " ");
         
         // 2. 줄바꿈 문자를 공백으로 변경
         cleaned = cleaned.replaceAll("\\n", " ");

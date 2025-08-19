@@ -108,7 +108,13 @@ public class ReviewController {
 		}
 		
 		try {
-			Map<String, Object> morphemes = koreanNLPService.analyzeMorphemes(text);
+			// analyzeMorphemes 메서드가 없으므로 tokenizeSimple을 사용하여 대체
+			List<String> tokens = koreanNLPService.tokenizeSimple(text);
+			Map<String, Object> morphemes = Map.of(
+				"originalText", text,
+				"tokens", tokens,
+				"tokenCount", tokens.size()
+			);
 			return ResponseEntity.ok(morphemes);
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
