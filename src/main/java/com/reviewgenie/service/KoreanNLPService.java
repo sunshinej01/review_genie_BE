@@ -1,16 +1,11 @@
+// KoreanNLPService.java
+
 package com.reviewgenie.service;
 
-import com.reviewgenie.domain.Keyword;
 import com.reviewgenie.repository.KeywordRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
-
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,326 +14,240 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class KoreanNLPService {
 
-    private final KeywordRepository keywordRepository;
+    private final KeywordRepository keywordRepository; // 생성자에서 필요 (현재 미사용이지만 추후 확장 가능)
 
-    // 간단한 한국어 패턴 매칭 기반 분석기
-    private static final Pattern KOREAN_PATTERN = Pattern.compile("[가-힣]+");
-    private static final Pattern NOUN_PATTERN = Pattern.compile(".*[가-힣]+(이|가|을|를|에|와|과|의|로|으로|에서|부터|까지|만|도|조차|마저|라도|나마|이나|거나|든지|이든|든)$");
-    private static final Pattern VERB_PATTERN = Pattern.compile(".*[가-힣]+(다|하다|되다|있다|없다|라|아|어|지|고|면|니다|습니다|세요|어요|아요)$");
-    private static final Pattern ADJ_PATTERN = Pattern.compile(".*[가-힣]+(한|은|는|던|을|ㄴ|적인|스러운|같은).*");
+    // [MODIFIED] 핵심 키워드 리스트
+    private static final Set<String> KEY_TERMS = Set.of(
+            "맛", "가격", "대기시간", "서비스", "예약", "포장", "청결", "인테리어", "메뉴"
+    );
+
+    // [NEW] 키워드에서 제외할 불용어 확장 (명사 위주 추출을 위한 비명사 단어들 제외)
+    private static final Set<String> STOP_WORDS = Set.of(
+            // 대명사, 수사, 조사 등
+            "이", "그", "저", "것", "수", "등", "및", "제", "때", "곳", "중", "내", "외",
+            "한", "두", "세", "네", "다섯", "또", "더", "덜", "말", "때문", "위해",
+            "통해", "따라", "같이", "함께", "각각", "모든", "여러", "많은", "적은",
+            
+            // 형용사, 동사, 어미 등 (명사가 아닌 단어들)
+            "예쁜", "맛있는", "맛있", "좋은", "최고", "가요", "있어요", "없어요", "입니다", "합니다",
+            "진짜", "정말", "너무", "아주", "매우", "조금", "약간", "완전", "거의", "아마",
+            "그냥", "그래서", "그런데", "하지만", "그러나", "그리고", "또한", "역시",
+            "환상적입니다", "길어서", "추천해요", "곳이에요", "힘들었어요", "좋아서", "편이지만", "만족합니다",
+            "깔끔하게", "해주셨어요", "비싸", "특히", "다만", "주말에는", "잘",
+            
+            // 일반적인 불용어 (의미가 약한 명사들)
+            "사람", "분", "씨", "님", "거기", "여기", "저기", "이거", "그거", "저거",
+            "이런", "그런", "저런", "어떤", "무슨", "같은", "다른", "새로운"
+    );
+
+
+    
+    // [NEW] 명사 패턴 정의 (한글로 이루어진 2글자 이상의 단어)
+    private static final Pattern NOUN_PATTERN = Pattern.compile("^[가-힣]{2,}$");
+    
+    // [NEW] 동사/형용사 어미 패턴 확장
+    private static final Pattern NON_NOUN_PATTERN = Pattern.compile(".*(다|하다|되다|있다|없다|시다|려고|면서|으며|지만|거나|든지|라도|부터|까지|에서|으로|이다|아니다|이야|이네|이에요|어요|아요|습니다|ㅂ니다|하네|하지|하더|하면|하고|해서|했다|할까|했어|했네|했지|했더|했으|했는|했던|한다|한데|한테|한테서|하려|하자|하기|한번|할때|할수|한것|한거|한지|했을|했던|할지|할것|하는중|하고있|해보|해야|해도|했지만|했으면|했었다|했었어|했었지|했었더|에요|어서|어도|니다|입니다|합니다|길어서|좋아서|깔끔하게|잘)$");
+
 
     /**
-     * 간단한 패턴 기반 한국어 토크나이징
+     * 문장 부호 기준으로 텍스트를 문장 리스트로 분리
      */
-    public List<String> tokenizeSimple(String text) {
+    private List<String> splitSentences(String text) {
         if (text == null || text.trim().isEmpty()) {
             return new ArrayList<>();
         }
-        
-        // 문장 부호 기준으로 분리 후 공백 기준 토크나이징
-        List<String> tokens = new ArrayList<>();
-        String cleanText = text.replaceAll("[^가-힣a-zA-Z0-9\\s]", " ");
-        
-        for (String word : cleanText.split("\\s+")) {
-            if (!word.trim().isEmpty() && word.length() > 0) {
-                tokens.add(word.trim());
-            }
-        }
-        
-        return tokens;
+        // 마침표, 물음표, 느낌표 및 줄바꿈을 기준으로 문장 분리
+        return Arrays.stream(text.split("[.!?\\n]+"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
     }
 
     /**
-     * 패턴 기반 간단한 형태소 분석 (경량화)
+     * [NEW] 명사 정규화 (조사 제거)
+     * 예: "말차라떼도" -> "말차라떼", "파이나" -> "파이"
      */
-    public Map<String, Object> analyzeMorphemes(String text) {
-        Map<String, Object> result = new HashMap<>();
-        List<Map<String, String>> morphemes = new ArrayList<>();
-        List<String> nouns = new ArrayList<>();
-        List<String> verbs = new ArrayList<>();
-        List<String> adjectives = new ArrayList<>();
-        
-        List<String> tokens = tokenizeSimple(text);
-        
-        for (String token : tokens) {
-            if (!KOREAN_PATTERN.matcher(token).find()) {
-                continue; // 한국어가 아닌 토큰 건너뛰기
-            }
-            
-            Map<String, String> morphInfo = new HashMap<>();
-            morphInfo.put("surface", token);
-            
-            // 간단한 품사 추정 (패턴 기반)
-            String pos = estimatePartOfSpeech(token);
-            morphInfo.put("tag", pos);
-            morphemes.add(morphInfo);
-            
-            // 품사별 분류
-            switch (pos) {
-                case "NOUN":
-                    nouns.add(token);
-                    break;
-                case "VERB":
-                    verbs.add(token);
-                    break;
-                case "ADJECTIVE":
-                    adjectives.add(token);
-                    break;
-            }
+    private String normalizeNoun(String noun) {
+        if (noun == null || noun.length() <= 1) {
+            return noun;
         }
-        
-        result.put("morphemes", morphemes);
-        result.put("nouns", nouns);
-        result.put("verbs", verbs);
-        result.put("adjectives", adjectives);
-        
-        return result;
+        return noun.replaceAll("(도|나|는|은|이|가|을|를)$", "");
     }
     
     /**
-     * 간단한 품사 추정 (패턴 기반)
+     * [NEW] 명사 여부 판별 메서드
+     * 동사/형용사/부사 등을 필터링하고 명사만 추출
      */
-    private String estimatePartOfSpeech(String word) {
-        if (VERB_PATTERN.matcher(word).matches()) {
-            return "VERB";
-        } else if (ADJ_PATTERN.matcher(word).matches()) {
-            return "ADJECTIVE";
-        } else if (word.length() > 1 && KOREAN_PATTERN.matcher(word).matches()) {
-            return "NOUN"; // 기본적으로 명사로 추정
-        } else {
-            return "UNKNOWN";
+    private boolean isNoun(String word) {
+        if (word == null || word.trim().isEmpty()) {
+            return false;
         }
+        
+        String normalizedWord = normalizeNoun(word.trim());
+        
+        // 1. 기본 패턴 체크: 한글 2글자 이상
+        if (!NOUN_PATTERN.matcher(normalizedWord).matches()) {
+            return false;
+        }
+        
+        // 2. 동사/형용사 어미 패턴 제외
+        if (NON_NOUN_PATTERN.matcher(normalizedWord).matches()) {
+            return false;
+        }
+        
+        // 3. 불용어 제외
+        if (STOP_WORDS.contains(normalizedWord)) {
+            return false;
+        }
+        
+        // 4. 추가 필터링: 단순 반복 문자 제외
+        if (normalizedWord.matches("(.)\\1+")) { // 예: "ㅋㅋㅋ", "ㅎㅎㅎ"
+            return false;
+        }
+        
+        return true;
     }
 
     /**
-     * 키워드 추출 (명사 기반 + 빈도 분석)
-     */
-    public List<String> extractKeywords(String text) {
-        Map<String, Object> analysis = analyzeMorphemes(text);
-        
-        @SuppressWarnings("unchecked")
-        List<String> nouns = (List<String>) analysis.get("nouns");
-        
-        if (nouns == null || nouns.isEmpty()) {
-            return new ArrayList<>();
-        }
-        
-        // 단어 빈도 계산 및 필터링
-        Map<String, Long> frequency = nouns.stream()
-            .filter(noun -> noun.length() > 1) // 1글자 제외
-            .filter(noun -> !isStopWord(noun)) // 불용어 제외
-            .filter(noun -> !isSpecialChar(noun)) // 특수문자 제외
-            .collect(Collectors.groupingBy(
-                noun -> noun, 
-                Collectors.counting()
-            ));
-        
-        // 빈도순 정렬하여 상위 키워드 반환
-        return frequency.entrySet().stream()
-            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-            .limit(10)
-            .map(Map.Entry::getKey)
-            .collect(Collectors.toList());
-    }
-
-    /**
-     * 키워드 순위 분석 결과를 추출 (빈도와 순위 포함)
+     * 키워드 순위 분석 (명사 위주 추출, 핵심/일반 분리 및 정규화/불용어 처리 강화)
      */
     public Map<String, Object> extractKeywordRankings(String text) {
-        Map<String, Object> analysis = analyzeMorphemes(text);
-        
-        @SuppressWarnings("unchecked")
-        List<String> nouns = (List<String>) analysis.get("nouns");
-        
+        List<String> tokens = tokenizeSimple(text);
+
         Map<String, Object> result = new HashMap<>();
-        List<Map<String, Object>> rankings = new ArrayList<>();
-        
-        if (nouns == null || nouns.isEmpty()) {
-            result.put("rankings", rankings);
-            result.put("totalKeywords", 0);
+
+        if (tokens.isEmpty()) {
+            result.put("keyTermsCount", new HashMap<>());
+            result.put("generalKeywordsRank", new ArrayList<>());
             return result;
         }
-        
-        // 단어 빈도 계산 및 순위 생성
-        Map<String, Long> frequency = nouns.stream()
-            .filter(noun -> noun.length() > 1) // 1글자 제외
-            .filter(noun -> !isStopWord(noun)) // 불용어 제외
-            .filter(noun -> !isSpecialChar(noun)) // 특수문자 제외
-            .collect(Collectors.groupingBy(
-                noun -> noun, 
-                Collectors.counting()
-            ));
-        
-        // 순위별로 정렬하여 결과 생성
-        int rank = 1;
-        for (Map.Entry<String, Long> entry : frequency.entrySet()
-                .stream()
+
+        // [MODIFIED] 명사 위주 필터링 및 정규화 강화
+        Map<String, Long> allFrequency = tokens.stream()
+                .filter(this::isNoun) // 명사 여부 판별 추가
+                .map(this::normalizeNoun) // 명사 정규화 적용
+                .filter(noun -> noun.length() > 1) // 1글자 제외
+                .collect(Collectors.groupingBy(noun -> noun, Collectors.counting()));
+
+        Map<String, Long> keyTermsCount = new HashMap<>();
+        Map<String, Long> generalKeywordsCount = new HashMap<>();
+
+        allFrequency.forEach((word, count) -> {
+            if (KEY_TERMS.contains(word)) {
+                keyTermsCount.put(word, count);
+            } else {
+                generalKeywordsCount.put(word, count);
+            }
+        });
+
+        // 키워드를 최소 10개, 최대 20개 분석
+        List<Map.Entry<String, Long>> generalRankings = generalKeywordsCount.entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-                .limit(10) // 상위 10개
-                .collect(Collectors.toList())) {
-            
-            Map<String, Object> keywordInfo = new HashMap<>();
-            keywordInfo.put("word", entry.getKey());
-            keywordInfo.put("frequency", entry.getValue());
-            keywordInfo.put("rank", rank++);
-            rankings.add(keywordInfo);
+                .limit(20) // 먼저 최대 20개까지 가져옴
+                .collect(Collectors.toList());
+                
+        // 만약 10개 미만이라면 빈도가 낮더라도 10개까지 채우기
+        if (generalRankings.size() < 10) {
+            // 모든 토큰에서 추가 키워드 찾기 (명사 필터링 완화)
+            Map<String, Long> additionalKeywords = tokens.stream()
+                .map(this::normalizeNoun)
+                .filter(word -> word.length() > 1)
+                .filter(word -> !KEY_TERMS.contains(word)) // 핵심 키워드 제외
+                .filter(word -> !generalKeywordsCount.containsKey(word)) // 이미 포함된 것 제외
+                .filter(word -> !STOP_WORDS.contains(word)) // 불용어 제외
+                .collect(Collectors.groupingBy(word -> word, Collectors.counting()));
+                
+            List<Map.Entry<String, Long>> additionalRankings = additionalKeywords.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(10 - generalRankings.size()) // 10개까지 채우기
+                .collect(Collectors.toList());
+                
+            generalRankings.addAll(additionalRankings);
         }
-        
-        result.put("rankings", rankings);
-        result.put("totalKeywords", frequency.size());
-        
+
+        result.put("keyTermsCount", keyTermsCount);
+        result.put("generalKeywordsRank", generalRankings);
+
         return result;
     }
 
-    /**
-     * 키워드 순위 분석 결과를 DB에 저장
-     */
-    public List<Keyword> saveKeywordsToDatabase(String text) {
-        Map<String, Object> keywordRankings = extractKeywordRankings(text);
-        
-        @SuppressWarnings("unchecked")
-        List<Map<String, Object>> rankings = (List<Map<String, Object>>) keywordRankings.get("rankings");
-        
-        List<Keyword> savedKeywords = new ArrayList<>();
-        
-        for (Map<String, Object> ranking : rankings) {
-            String word = (String) ranking.get("word");
-            
-            // 중복 체크 후 저장
-            if (!keywordRepository.existsByWord(word)) {
-                Keyword keyword = Keyword.builder()
-                        .word(word)
-                        .build();
-                savedKeywords.add(keywordRepository.save(keyword));
-            }
-        }
-        
-        return savedKeywords;
-    }
 
     /**
-     * 한국어 감정 분석 (룰 기반)
+     * [NEW] 핵심 키워드별 감성 분석
      */
+    public Map<String, Map<String, Integer>> analyzeSentimentByKeyTerms(String text) {
+        Map<String, Map<String, Integer>> sentimentByKeyword = new HashMap<>();
+        KEY_TERMS.forEach(term -> {
+            Map<String, Integer> counts = new HashMap<>();
+            counts.put("POSITIVE", 0);
+            counts.put("NEGATIVE", 0);
+            sentimentByKeyword.put(term, counts);
+        });
+
+        List<String> sentences = splitSentences(text);
+
+        for (String sentence : sentences) {
+            Map<String, Object> sentimentResult = analyzeSentiment(sentence);
+            String sentenceSentiment = (String) sentimentResult.get("sentiment");
+
+            if ("NEUTRAL".equals(sentenceSentiment)) {
+                continue; // 중립 문장은 집계에서 제외
+            }
+
+            List<String> tokens = tokenizeSimple(sentence);
+            Set<String> foundTermsInSentence = new HashSet<>();
+
+            for(String token : tokens) {
+                String normalized = normalizeNoun(token);
+                if (KEY_TERMS.contains(normalized)) {
+                    foundTermsInSentence.add(normalized);
+                }
+            }
+            
+            // 한 문장에 동일 키워드가 여러번 나와도 한 번만 집계
+            for (String term : foundTermsInSentence) {
+                Map<String, Integer> counts = sentimentByKeyword.get(term);
+                if ("POSITIVE".equals(sentenceSentiment)) {
+                    counts.put("POSITIVE", counts.get("POSITIVE") + 1);
+                } else if ("NEGATIVE".equals(sentenceSentiment)) {
+                    counts.put("NEGATIVE", counts.get("NEGATIVE") + 1);
+                }
+            }
+        }
+        return sentimentByKeyword;
+    }
+
+
+    // ===================================================================
+    // 아래는 기존 메소드들입니다 (수정 없음, analyzeSentiment만 참고용으로 사용됨)
+    // ===================================================================
+
+    public List<String> tokenizeSimple(String text) {
+        if (text == null || text.trim().isEmpty()) { return new ArrayList<>(); }
+        List<String> tokens = new ArrayList<>();
+        String cleanText = text.replaceAll("[^가-힣a-zA-Z0-9\\s]", " ");
+        for (String word : cleanText.split("\\s+")) {
+            if (!word.trim().isEmpty()) {
+                tokens.add(word.trim());
+            }
+        }
+        return tokens;
+    }
+    
     public Map<String, Object> analyzeSentiment(String text) {
         Map<String, Object> result = new HashMap<>();
-        
-        // 감정 키워드 사전 (확장 가능)
-        Set<String> positiveWords = Set.of(
-            "좋", "훌륭", "최고", "만족", "추천", "괜찮", "맛있", 
-            "친절", "깨끗", "빠르", "편리", "감사", "완벽", "멋지", "사랑",
-            "기쁘", "행복", "즐거", "재미", "신선", "맛", "품질", "서비스"
-        );
-        
-        Set<String> negativeWords = Set.of(
-            "나쁘", "최악", "불만", "별로", "싫", "맛없", "실망", "짜증",
-            "불친절", "더럽", "느리", "불편", "화나", "문제", "오류", "고장",
-            "비싸", "늦", "틀리", "잘못", "부족", "어려", "복잡", "답답"
-        );
-        
+        Set<String> positiveWords = Set.of("좋", "훌륭", "최고", "만족", "추천", "괜찮", "맛있", "친절", "깨끗", "빠르", "편리", "감사", "완벽", "멋지", "사랑", "기쁘", "행복", "즐거", "재미", "신선", "맛", "품질", "서비스");
+        Set<String> negativeWords = Set.of("나쁘", "최악", "불만", "별로", "싫", "맛없", "실망", "짜증", "불친절", "더럽", "느리", "불편", "화나", "문제", "오류", "고장", "비싸", "늦", "틀리", "잘못", "부족", "어려", "복잡", "답답");
         List<String> tokens = tokenizeSimple(text);
-        
         int positiveScore = 0;
         int negativeScore = 0;
-        List<String> foundPositive = new ArrayList<>();
-        List<String> foundNegative = new ArrayList<>();
-        
-        // 토큰별 감정 단어 찾기
         for (String token : tokens) {
-            for (String pos : positiveWords) {
-                if (token.contains(pos)) {
-                    positiveScore++;
-                    foundPositive.add(token);
-                    break;
-                }
-            }
-            for (String neg : negativeWords) {
-                if (token.contains(neg)) {
-                    negativeScore++;
-                    foundNegative.add(token);
-                    break;
-                }
-            }
+            for (String pos : positiveWords) { if (token.contains(pos)) { positiveScore++; break; }}
+            for (String neg : negativeWords) { if (token.contains(neg)) { negativeScore++; break; }}
         }
-        
-        // 결과 저장
-        result.put("positiveScore", positiveScore);
-        result.put("negativeScore", negativeScore);
-        result.put("foundPositiveWords", foundPositive);
-        result.put("foundNegativeWords", foundNegative);
-        
-        // 전체 감정 판정
-        if (positiveScore > negativeScore) {
-            result.put("sentiment", "POSITIVE");
-            result.put("confidence", (double) positiveScore / (positiveScore + negativeScore));
-        } else if (negativeScore > positiveScore) {
-            result.put("sentiment", "NEGATIVE");
-            result.put("confidence", (double) negativeScore / (positiveScore + negativeScore));
-        } else {
-            result.put("sentiment", "NEUTRAL");
-            result.put("confidence", 0.5);
-        }
-        
+        if (positiveScore > negativeScore) { result.put("sentiment", "POSITIVE");
+        } else if (negativeScore > positiveScore) { result.put("sentiment", "NEGATIVE");
+        } else { result.put("sentiment", "NEUTRAL"); }
         return result;
-    }
-
-    /**
-     * 종합 텍스트 분석
-     */
-    public Map<String, Object> analyzeText(String text) {
-        Map<String, Object> result = new HashMap<>();
-        
-        // 기본 정보
-        result.put("originalText", text);
-        result.put("textLength", text.length());
-        result.put("language", "KOREAN");
-        result.put("analyzer", "Apache Lucene Nori");
-        
-        // 분석 결과
-        result.put("tokens", tokenizeSimple(text));
-        result.put("morphemeAnalysis", analyzeMorphemes(text));
-        result.put("keywords", extractKeywords(text));
-        result.put("sentiment", analyzeSentiment(text));
-        
-        // 통계 정보
-        List<String> tokens = tokenizeSimple(text);
-        result.put("tokenCount", tokens.size());
-        result.put("uniqueTokenCount", tokens.stream().distinct().count());
-        
-        return result;
-    }
-
-    /**
-     * 불용어 체크
-     */
-    private boolean isStopWord(String word) {
-        Set<String> stopWords = Set.of(
-            "이", "그", "저", "것", "수", "등", "및", "제", "때", "곳", "중", "내", "외",
-            "한", "두", "세", "네", "다섯", "또", "더", "덜", "말", "때문", "위해",
-            "통해", "따라", "같이", "함께", "각각", "모든", "여러", "많은", "적은"
-        );
-        return stopWords.contains(word);
-    }
-
-    /**
-     * 특수문자 체크
-     */
-    private boolean isSpecialChar(String word) {
-        return word.matches(".*[^가-힣a-zA-Z0-9].*") || 
-               word.matches("\\d+") || // 숫자만
-               word.length() == 1; // 1글자
-    }
-
-    /**
-     * 텍스트 정제
-     */
-    public String cleanText(String text) {
-        if (text == null || text.trim().isEmpty()) {
-            return "";
-        }
-        
-        return text
-            .replaceAll("[^가-힣a-zA-Z0-9\\s.,!?]", "") // 특수문자 제거
-            .replaceAll("\\s+", " ") // 연속 공백 제거
-            .trim();
     }
 }

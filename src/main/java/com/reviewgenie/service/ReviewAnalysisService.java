@@ -78,7 +78,14 @@ public class ReviewAnalysisService {
      */
     public List<String> extractKoreanKeywords(String reviewText) {
         try {
-            return koreanNLPService.extractKeywords(reviewText);
+            // extractKeywords 메서드가 없으므로 extractKeywordRankings을 사용하여 대체
+            Map<String, Object> keywordResult = koreanNLPService.extractKeywordRankings(reviewText);
+            @SuppressWarnings("unchecked")
+            List<Map.Entry<String, Long>> generalKeywords = (List<Map.Entry<String, Long>>) keywordResult.get("generalKeywordsRank");
+            
+            return generalKeywords.stream()
+                .map(entry -> entry.getKey())
+                .collect(java.util.stream.Collectors.toList());
         } catch (Exception e) {
             System.err.println("한국어 키워드 추출 오류: " + e.getMessage());
             return Collections.emptyList();
@@ -90,7 +97,19 @@ public class ReviewAnalysisService {
      */
     public Map<String, Object> analyzeReview(String reviewText) {
         if (containsKorean(reviewText)) {
-            return koreanNLPService.analyzeText(reviewText);
+            // analyzeText 메서드가 없으므로 여러 메서드를 조합하여 대체
+            Map<String, Object> sentimentResult = koreanNLPService.analyzeSentiment(reviewText);
+            Map<String, Object> keywordResult = koreanNLPService.extractKeywordRankings(reviewText);
+            List<String> tokens = koreanNLPService.tokenizeSimple(reviewText);
+            
+            Map<String, Object> result = new java.util.HashMap<>();
+            result.put("originalText", reviewText);
+            result.put("sentiment", sentimentResult.get("sentiment"));
+            result.put("keywordRankings", keywordResult);
+            result.put("tokens", tokens);
+            result.put("language", "KOREAN");
+            
+            return result;
         } else {
             // 영어 분석 로직 (추후 구현 가능)
             return Map.of(
