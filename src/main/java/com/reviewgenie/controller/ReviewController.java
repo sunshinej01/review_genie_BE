@@ -120,6 +120,24 @@ public class ReviewController {
 			return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
 		}
 	}
+
+	/**
+	 * 주요 키워드 중심 이진 감성 분석 (POSITIVE/NEGATIVE)
+	 */
+	@PostMapping("/analyze/sentiment-binary")
+	public ResponseEntity<Map<String, Object>> analyzeSentimentBinary(@RequestBody Map<String, String> request) {
+		String text = request.get("text");
+		if (text == null || text.trim().isEmpty()) {
+			return ResponseEntity.badRequest().body(Map.of("error", "텍스트가 필요합니다."));
+		}
+
+		try {
+			Map<String, Object> result = reviewAnalysisService.analyzeBinary(text);
+			return ResponseEntity.ok(result);
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+		}
+	}
 	
 	/**
 	 * 감성분석 결과 출력 (POSITIVE/NEGATIVE만, DB 저장 없음)
