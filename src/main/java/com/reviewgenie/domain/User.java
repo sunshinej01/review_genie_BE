@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "users") // PostgreSQL 예약어 'user' 회피
 public class User {
 
 	@Id

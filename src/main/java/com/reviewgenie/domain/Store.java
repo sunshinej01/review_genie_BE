@@ -19,6 +19,12 @@ public class Store {
 	private String name;
 
 	private String address;
+	
+	@Column(name = "store_id")
+	private String storeId; // JSON의 place_id
+	
+	@Column(name = "store_type")
+	private String storeType; // MY_STORE, COMPETITOR
 }
 
 

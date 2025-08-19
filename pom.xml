@@ -46,6 +46,18 @@
 
 		<!-- 한국어 NLP - 경량화된 패턴 기반 접근법 사용 (외부 라이브러리 불필요) -->
 		
+		<!-- JAXB API for Java 17 compatibility with Stanford CoreNLP -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.8</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>

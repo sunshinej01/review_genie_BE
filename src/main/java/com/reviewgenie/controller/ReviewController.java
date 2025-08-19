@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reviewgenie.dto.ReviewDto;
 import com.reviewgenie.service.ReviewAnalysisService;
 import com.reviewgenie.service.KoreanNLPService;
+import com.reviewgenie.service.ReviewBatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class ReviewController {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final ReviewAnalysisService reviewAnalysisService;
 	private final KoreanNLPService koreanNLPService;
+	private final ReviewBatchService reviewBatchService;
 
 	@GetMapping
 	public ResponseEntity<List<ReviewDto>> getAll() throws Exception {
@@ -110,6 +112,27 @@ public class ReviewController {
 			return ResponseEntity.ok(morphemes);
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+		}
+	}
+	
+	/**
+	 * 감성분석 결과 출력 (POSITIVE/NEGATIVE만, DB 저장 없음)
+	 */
+	@PostMapping("/analyze/print")
+	public ResponseEntity<Map<String, Object>> analyzeAndPrintReviews() {
+		try {
+			reviewBatchService.analyzeAndPrintReviews();
+			
+			return ResponseEntity.ok(Map.of(
+				"success", true,
+				"message", "감성분석 완료! 콘솔 로그를 확인해주세요.",
+				"note", "POSITIVE/NEGATIVE 이진 분류로 처리되었습니다."
+			));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(Map.of(
+				"success", false,
+				"error", e.getMessage()
+			));
 		}
 	}
 }
