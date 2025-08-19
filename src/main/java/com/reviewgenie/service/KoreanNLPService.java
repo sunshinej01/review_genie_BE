@@ -21,6 +21,36 @@ public class KoreanNLPService {
             "맛", "가격", "대기시간", "서비스", "예약", "포장", "청결", "인테리어", "메뉴"
     );
 
+    // [NEW] 키워드별 긍정 감성어 사전
+    private static final Map<String, Set<String>> KEYWORD_POSITIVE_WORDS = Map.of(
+            "맛", Set.of("맛있", "맛나", "맛좋", "달콤", "고소", "시원", "깔끔", "부드러", "쫄깃", "짱", "환상적", "최고", "좋", "훌륭", "완벽", "신선", "맛집"),
+            "인테리어", Set.of("예쁜", "러블리", "깔끔", "세련", "아늑", "분위기좋", "꾸며져", "멋지", "이쁘", "아름다", "고급", "모던", "클래식", "감각적"),
+            "서비스", Set.of("친절", "빠르", "정성", "세심", "배려", "좋", "만족", "완벽", "훌륭", "감사", "최고", "괜찮"),
+            "가격", Set.of("저렴", "합리적", "괜찮", "적당", "만족", "좋", "가성비", "알맞"),
+            "대기시간", Set.of("빠르", "짧", "금방", "바로", "신속", "즉시"),
+            "예약", Set.of("편리", "쉽", "간단", "좋", "괜찮", "만족"),
+            "포장", Set.of("깔끔", "좋", "완벽", "세심", "괜찮", "만족", "편리"),
+            "청결", Set.of("깨끗", "깔끔", "위생적", "청결", "좋", "완벽", "만족"),
+            "메뉴", Set.of("다양", "풍부", "좋", "많", "괜찮", "만족", "선택폭")
+    );
+
+    // [NEW] 키워드별 부정 감성어 사전
+    private static final Map<String, Set<String>> KEYWORD_NEGATIVE_WORDS = Map.of(
+            "맛", Set.of("맛없", "아쉬", "별로", "싱거", "짜", "느끼", "질겨", "달", "진해", "밍밍", "시", "쓴", "떫", "비리", "텁텁"),
+            "가격", Set.of("비싸", "부담", "아까", "폭리", "과도", "높", "부담스러"),
+            "대기시간", Set.of("길어", "오래", "늦", "느리", "답답", "기다려", "지연", "힘들"),
+            "서비스", Set.of("불친절", "느리", "불만", "별로", "아쉬", "부족", "나쁘", "실망", "화나"),
+            "예약", Set.of("어려", "힘들", "복잡", "불편", "안돼", "막혀"),
+            "포장", Set.of("아쉬", "별로", "불편", "부족", "나쁘", "엉성", "허술"),
+            "청결", Set.of("더럽", "지저분", "불결", "냄새", "벌레", "먼지", "얼룩"),
+            "메뉴", Set.of("적", "부족", "없", "별로", "아쉬", "단조", "제한적")
+    );
+
+    // [NEW] 부정 맥락어 (긍정어와 함께 나타나면 부정으로 전환)
+    private static final Set<String> NEGATIVE_CONTEXT_WORDS = Set.of(
+            "아쉬", "하지만", "그런데", "다만", "그러나", "근데", "안타깝", "아깝", "그럼에도", "차라리", "오히려"
+    );
+
     // [NEW] 키워드에서 제외할 불용어 확장 (명사 위주 추출을 위한 비명사 단어들 제외)
     private static final Set<String> STOP_WORDS = Set.of(
             // 대명사, 수사, 조사 등
@@ -173,7 +203,7 @@ public class KoreanNLPService {
 
 
     /**
-     * [NEW] 핵심 키워드별 감성 분석
+     * [NEW] 고급 키워드별 감성 분석 (사전 기반 + 컨텍스트 규칙)
      */
     public Map<String, Map<String, Integer>> analyzeSentimentByKeyTerms(String text) {
         Map<String, Map<String, Integer>> sentimentByKeyword = new HashMap<>();
@@ -187,34 +217,171 @@ public class KoreanNLPService {
         List<String> sentences = splitSentences(text);
 
         for (String sentence : sentences) {
-            Map<String, Object> sentimentResult = analyzeSentiment(sentence);
-            String sentenceSentiment = (String) sentimentResult.get("sentiment");
-
-            if ("NEUTRAL".equals(sentenceSentiment)) {
-                continue; // 중립 문장은 집계에서 제외
-            }
-
             List<String> tokens = tokenizeSimple(sentence);
-            Set<String> foundTermsInSentence = new HashSet<>();
-
-            for(String token : tokens) {
+            
+            // 문장에서 발견된 키워드들
+            Set<String> foundKeywords = new HashSet<>();
+            for (String token : tokens) {
                 String normalized = normalizeNoun(token);
                 if (KEY_TERMS.contains(normalized)) {
-                    foundTermsInSentence.add(normalized);
+                    foundKeywords.add(normalized);
                 }
             }
             
-            // 한 문장에 동일 키워드가 여러번 나와도 한 번만 집계
-            for (String term : foundTermsInSentence) {
-                Map<String, Integer> counts = sentimentByKeyword.get(term);
-                if ("POSITIVE".equals(sentenceSentiment)) {
-                    counts.put("POSITIVE", counts.get("POSITIVE") + 1);
-                } else if ("NEGATIVE".equals(sentenceSentiment)) {
-                    counts.put("NEGATIVE", counts.get("NEGATIVE") + 1);
+            if (foundKeywords.isEmpty()) {
+                continue; // 키워드가 없는 문장은 스킵
+            }
+            
+            // 각 키워드에 대한 감성 분석
+            for (String keyword : foundKeywords) {
+                String sentiment = analyzeKeywordSentimentInSentence(sentence, keyword, tokens);
+                
+                if ("POSITIVE".equals(sentiment)) {
+                    sentimentByKeyword.get(keyword).put("POSITIVE", 
+                        sentimentByKeyword.get(keyword).get("POSITIVE") + 1);
+                } else if ("NEGATIVE".equals(sentiment)) {
+                    sentimentByKeyword.get(keyword).put("NEGATIVE", 
+                        sentimentByKeyword.get(keyword).get("NEGATIVE") + 1);
                 }
             }
         }
+        
+        // 1:1 비율시 positive bias 적용
+        return applyPositiveBias(sentimentByKeyword);
+    }
+    
+    /**
+     * [NEW] 문장 내에서 특정 키워드의 감성 분석 (사전 기반 + 컨텍스트)
+     */
+    private String analyzeKeywordSentimentInSentence(String sentence, String keyword, List<String> tokens) {
+        Set<String> positiveWords = KEYWORD_POSITIVE_WORDS.getOrDefault(keyword, Set.of());
+        Set<String> negativeWords = KEYWORD_NEGATIVE_WORDS.getOrDefault(keyword, Set.of());
+        
+        boolean hasPositive = false;
+        boolean hasNegative = false;
+        boolean hasNegativeContext = false;
+        
+        // 토큰들을 순회하며 감성어 및 부정 맥락어 검사
+        for (String token : tokens) {
+            String normalized = normalizeNoun(token);
+            
+            // 긍정어 검사
+            for (String posWord : positiveWords) {
+                if (token.contains(posWord) || normalized.contains(posWord)) {
+                    hasPositive = true;
+                    break;
+                }
+            }
+            
+            // 부정어 검사
+            for (String negWord : negativeWords) {
+                if (token.contains(negWord) || normalized.contains(negWord)) {
+                    hasNegative = true;
+                    break;
+                }
+            }
+            
+            // 부정 맥락어 검사
+            for (String contextWord : NEGATIVE_CONTEXT_WORDS) {
+                if (token.contains(contextWord) || normalized.contains(contextWord)) {
+                    hasNegativeContext = true;
+                    break;
+                }
+            }
+        }
+        
+        // 감성 판단 로직
+        if (hasNegative) {
+            return "NEGATIVE";
+        } else if (hasPositive && hasNegativeContext) {
+            // 긍정어 + 부정 맥락어 → 부정 (예: "맛있긴 하지만 아쉬웠어요")
+            return "NEGATIVE";
+        } else if (hasPositive) {
+            return "POSITIVE";
+        }
+        
+        // 사전에 없는 경우 기존 전체 감성분석 로직 사용
+        Map<String, Object> sentimentResult = analyzeSentiment(sentence);
+        String overallSentiment = (String) sentimentResult.get("sentiment");
+        
+        if ("NEUTRAL".equals(overallSentiment)) {
+            return null; // 중립은 집계하지 않음
+        }
+        
+        return overallSentiment;
+    }
+    
+    /**
+     * [NEW] 1:1 비율시 positive bias 적용
+     */
+    private Map<String, Map<String, Integer>> applyPositiveBias(Map<String, Map<String, Integer>> sentimentByKeyword) {
+        for (Map.Entry<String, Map<String, Integer>> entry : sentimentByKeyword.entrySet()) {
+            Map<String, Integer> counts = entry.getValue();
+            int positive = counts.get("POSITIVE");
+            int negative = counts.get("NEGATIVE");
+            
+            // 1:1 비율인 경우 positive bias 적용 (negative를 1 감소)
+            if (positive == negative && positive > 0) {
+                counts.put("NEGATIVE", negative - 1);
+                counts.put("POSITIVE", positive); // positive는 그대로 유지
+            }
+        }
         return sentimentByKeyword;
+    }
+
+    /**
+     * 주요 키워드가 포함된 문장만을 대상으로 한 이진 감성분석 (POSITIVE/NEGATIVE)
+     * - 키워드 포함 문장들의 감성만 합산하여 최종 라벨 결정
+     * - 키워드 포함 문장이 없으면 label=UNKNOWN 으로 반환 (호출 측에서 백업 로직 사용)
+     * 반환 예시: { label: "POSITIVE"|"NEGATIVE"|"UNKNOWN", posCount: n, negCount: n, matchedSentences: m }
+     */
+    public Map<String, Object> classifyBinaryByKeyTerms(String text) {
+        Map<String, Object> result = new HashMap<>();
+        List<String> sentences = splitSentences(text);
+
+        int positiveSentenceCount = 0;
+        int negativeSentenceCount = 0;
+        int matchedSentences = 0;
+
+        for (String sentence : sentences) {
+            // 문장에 주요 키워드가 포함되어 있는지 검사
+            boolean containsKeyTerm = false;
+            for (String token : tokenizeSimple(sentence)) {
+                String normalized = normalizeNoun(token);
+                if (KEY_TERMS.contains(normalized)) {
+                    containsKeyTerm = true;
+                    break;
+                }
+            }
+
+            if (!containsKeyTerm) {
+                continue;
+            }
+
+            Map<String, Object> sentimentResult = analyzeSentiment(sentence);
+            String sentenceSentiment = (String) sentimentResult.get("sentiment");
+
+            if ("POSITIVE".equals(sentenceSentiment)) {
+                positiveSentenceCount++;
+                matchedSentences++;
+            } else if ("NEGATIVE".equals(sentenceSentiment)) {
+                negativeSentenceCount++;
+                matchedSentences++;
+            } else {
+                // NEUTRAL 은 합산에서 제외
+            }
+        }
+
+        String label = "UNKNOWN";
+        if (matchedSentences > 0) {
+            label = positiveSentenceCount >= negativeSentenceCount ? "POSITIVE" : "NEGATIVE";
+        }
+
+        result.put("label", label);
+        result.put("posCount", positiveSentenceCount);
+        result.put("negCount", negativeSentenceCount);
+        result.put("matchedSentences", matchedSentences);
+        return result;
     }
 
 

@@ -119,6 +119,48 @@ public class ReviewAnalysisService {
             );
         }
     }
+
+    /**
+     * 이진 감성 분석 (주요 키워드 중심 → 없으면 백업 로직)
+     * 반환: { label, matchedSentences, posCount, negCount, fallbackUsed, language }
+     */
+    public Map<String, Object> analyzeBinary(String reviewText) {
+        if (containsKorean(reviewText)) {
+            Map<String, Object> byKeyTerms = koreanNLPService.classifyBinaryByKeyTerms(reviewText);
+            String label = (String) byKeyTerms.get("label");
+            Integer matched = (Integer) byKeyTerms.get("matchedSentences");
+            if (matched != null && matched > 0 && ("POSITIVE".equals(label) || "NEGATIVE".equals(label))) {
+                byKeyTerms.put("fallbackUsed", false);
+                byKeyTerms.put("language", "KOREAN");
+                return byKeyTerms;
+            }
+
+            // 백업: 한국어 전체 감성 → 이진 매핑(NEUTRAL은 POSITIVE로)
+            Map<String, Object> sentiment = koreanNLPService.analyzeSentiment(reviewText);
+            String overall = (String) sentiment.get("sentiment");
+            String binary = "NEGATIVE".equalsIgnoreCase(overall) ? "NEGATIVE" : "POSITIVE";
+            return Map.of(
+                "label", binary,
+                "matchedSentences", 0,
+                "posCount", 0,
+                "negCount", 0,
+                "fallbackUsed", true,
+                "language", "KOREAN"
+            );
+        } else {
+            // 영어: 기존 영어 감성 → 이진 매핑(NEUTRAL은 POSITIVE)
+            String sentiment = analyzeEnglishSentiment(reviewText);
+            String binary = "NEGATIVE".equalsIgnoreCase(sentiment) ? "NEGATIVE" : "POSITIVE";
+            return Map.of(
+                "label", binary,
+                "matchedSentences", 0,
+                "posCount", 0,
+                "negCount", 0,
+                "fallbackUsed", true,
+                "language", "ENGLISH"
+            );
+        }
+    }
     
     /**
      * 한국어 포함 여부 체크

@@ -333,10 +333,18 @@ public class ReviewBatchService {
         try {
             // 한국어 텍스트는 KoreanNLPService 사용
             if (containsKorean(reviewText)) {
+                // 1) 주요 키워드가 포함된 문장만으로 이진 판단 (우선 적용)
+                Map<String, Object> keywordBinary = koreanNLPService.classifyBinaryByKeyTerms(reviewText);
+                String label = (String) keywordBinary.get("label");
+                Integer matched = (Integer) keywordBinary.get("matchedSentences");
+
+                if (matched != null && matched > 0 && ("POSITIVE".equals(label) || "NEGATIVE".equals(label))) {
+                    return label;
+                }
+
+                // 2) 백업 로직: 전체 텍스트 감성 → 이진 매핑 (NEUTRAL 편향 규칙 유지)
                 Map<String, Object> sentimentResult = koreanNLPService.analyzeSentiment(reviewText);
                 String sentiment = (String) sentimentResult.get("sentiment");
-                
-                // NEUTRAL을 긍정으로 편향시키거나 더 정교한 분류
                 return classifyToBinary(sentiment, sentimentResult);
             } else {
                 // 영어 텍스트는 Stanford CoreNLP 사용
