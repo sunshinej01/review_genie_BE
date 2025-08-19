@@ -1,0 +1,662 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dineug/erd-editor/main/json-schema/schema.json",
+  "version": "3.0.0",
+  "settings": {
+    "width": 2000,
+    "height": 2000,
+    "scrollTop": 0,
+    "scrollLeft": 0,
+    "zoomLevel": 1,
+    "show": 431,
+    "database": 16,
+    "databaseName": "PostgreSQL",
+    "canvasType": "ERD",
+    "language": 16,
+    "tableNameCase": 8,
+    "columnNameCase": 8,
+    "bracketType": 2,
+    "relationshipDataTypeSync": true,
+    "relationshipOptimization": false,
+    "columnOrder": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64
+    ],
+    "maxWidthComment": -1,
+    "ignoreSaveSettings": 0
+  },
+  "doc": {
+    "tableIds": [
+      "tbl_user",
+      "tbl_store",
+      "tbl_review",
+      "tbl_competitor",
+      "tbl_keyword"
+    ],
+    "relationshipIds": [
+      "rel_user_store",
+      "rel_store_review",
+      "rel_store_competitor"
+    ],
+    "indexIds": [],
+    "memoIds": []
+  },
+  "collections": {
+    "tableEntities": {
+      "tbl_user": {
+        "id": "tbl_user",
+        "name": "USER",
+        "comment": "사용자 테이블",
+        "columnIds": [
+          "col_user_user_id",
+          "col_user_username",
+          "col_user_password",
+          "col_user_store_id"
+        ],
+        "seqColumnIds": [
+          "col_user_user_id",
+          "col_user_username",
+          "col_user_password",
+          "col_user_store_id"
+        ],
+        "ui": {
+          "x": 100,
+          "y": 100,
+          "zIndex": 1,
+          "widthName": 160,
+          "widthComment": 120,
+          "color": "#E3F2FD"
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "tbl_store": {
+        "id": "tbl_store",
+        "name": "STORE",
+        "comment": "가게 테이블",
+        "columnIds": [
+          "col_store_store_id",
+          "col_store_store_name",
+          "col_store_location"
+        ],
+        "seqColumnIds": [
+          "col_store_store_id",
+          "col_store_store_name",
+          "col_store_location"
+        ],
+        "ui": {
+          "x": 350,
+          "y": 100,
+          "zIndex": 1,
+          "widthName": 160,
+          "widthComment": 120,
+          "color": "#FFFDE7"
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "tbl_review": {
+        "id": "tbl_review",
+        "name": "REVIEW",
+        "comment": "리뷰 테이블",
+        "columnIds": [
+          "col_review_review_id",
+          "col_review_store_id",
+          "col_review_platform",
+          "col_review_rating",
+          "col_review_content",
+          "col_review_sentiment",
+          "col_review_created_at"
+        ],
+        "seqColumnIds": [
+          "col_review_review_id",
+          "col_review_store_id",
+          "col_review_platform",
+          "col_review_rating",
+          "col_review_content",
+          "col_review_sentiment",
+          "col_review_created_at"
+        ],
+        "ui": {
+          "x": 350,
+          "y": 300,
+          "zIndex": 1,
+          "widthName": 180,
+          "widthComment": 120,
+          "color": "#E8F5E9"
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "tbl_competitor": {
+        "id": "tbl_competitor",
+        "name": "COMPETITOR",
+        "comment": "경쟁사 테이블",
+        "columnIds": [
+          "col_competitor_competitor_id",
+          "col_competitor_store_id",
+          "col_competitor_competitor_name",
+          "col_competitor_location"
+        ],
+        "seqColumnIds": [
+          "col_competitor_competitor_id",
+          "col_competitor_store_id",
+          "col_competitor_competitor_name",
+          "col_competitor_location"
+        ],
+        "ui": {
+          "x": 580,
+          "y": 300,
+          "zIndex": 1,
+          "widthName": 180,
+          "widthComment": 120,
+          "color": "#FFF3E0"
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "tbl_keyword": {
+        "id": "tbl_keyword",
+        "name": "KEYWORD",
+        "comment": "키워드 테이블",
+        "columnIds": [
+          "col_keyword_keyword_id",
+          "col_keyword_word",
+          "col_keyword_count",
+          "col_keyword_category",
+          "col_keyword_related_to"
+        ],
+        "seqColumnIds": [
+          "col_keyword_keyword_id",
+          "col_keyword_word",
+          "col_keyword_count",
+          "col_keyword_category",
+          "col_keyword_related_to"
+        ],
+        "ui": {
+          "x": 790,
+          "y": 300,
+          "zIndex": 1,
+          "widthName": 160,
+          "widthComment": 120,
+          "color": "#F0F4C3"
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      }
+    },
+    "tableColumnEntities": {
+      "col_user_user_id": {
+        "id": "col_user_user_id",
+        "tableId": "tbl_user",
+        "name": "user_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_user_username": {
+        "id": "col_user_username",
+        "tableId": "tbl_user",
+        "name": "username",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_user_password": {
+        "id": "col_user_password",
+        "tableId": "tbl_user",
+        "name": "password",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_user_store_id": {
+        "id": "col_user_store_id",
+        "tableId": "tbl_user",
+        "name": "store_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_store_store_id": {
+        "id": "col_store_store_id",
+        "tableId": "tbl_store",
+        "name": "store_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_store_store_name": {
+        "id": "col_store_store_name",
+        "tableId": "tbl_store",
+        "name": "store_name",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_store_location": {
+        "id": "col_store_location",
+        "tableId": "tbl_store",
+        "name": "location",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_review_review_id": {
+        "id": "col_review_review_id",
+        "tableId": "tbl_review",
+        "name": "review_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_review_store_id": {
+        "id": "col_review_store_id",
+        "tableId": "tbl_review",
+        "name": "store_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_review_platform": {
+        "id": "col_review_platform",
+        "tableId": "tbl_review",
+        "name": "platform",
+        "comment": "",
+        "dataType": "VARCHAR(50)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_review_rating": {
+        "id": "col_review_rating",
+        "tableId": "tbl_review",
+        "name": "rating",
+        "comment": "",
+        "dataType": "FLOAT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_review_content": {
+        "id": "col_review_content",
+        "tableId": "tbl_review",
+        "name": "content",
+        "comment": "",
+        "dataType": "TEXT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_review_sentiment": {
+        "id": "col_review_sentiment",
+        "tableId": "tbl_review",
+        "name": "sentiment",
+        "comment": "",
+        "dataType": "VARCHAR(50)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_review_created_at": {
+        "id": "col_review_created_at",
+        "tableId": "tbl_review",
+        "name": "created_at",
+        "comment": "",
+        "dataType": "TIMESTAMP",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_competitor_competitor_id": {
+        "id": "col_competitor_competitor_id",
+        "tableId": "tbl_competitor",
+        "name": "competitor_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_competitor_store_id": {
+        "id": "col_competitor_store_id",
+        "tableId": "tbl_competitor",
+        "name": "store_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_competitor_competitor_name": {
+        "id": "col_competitor_competitor_name",
+        "tableId": "tbl_competitor",
+        "name": "competitor_name",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_competitor_location": {
+        "id": "col_competitor_location",
+        "tableId": "tbl_competitor",
+        "name": "location",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_keyword_keyword_id": {
+        "id": "col_keyword_keyword_id",
+        "tableId": "tbl_keyword",
+        "name": "keyword_id",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 11,
+        "ui": {
+          "keys": 1
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_keyword_word": {
+        "id": "col_keyword_word",
+        "tableId": "tbl_keyword",
+        "name": "word",
+        "comment": "",
+        "dataType": "VARCHAR(255)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_keyword_count": {
+        "id": "col_keyword_count",
+        "tableId": "tbl_keyword",
+        "name": "count",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_keyword_category": {
+        "id": "col_keyword_category",
+        "tableId": "tbl_keyword",
+        "name": "category",
+        "comment": "",
+        "dataType": "VARCHAR(50)",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "col_keyword_related_to": {
+        "id": "col_keyword_related_to",
+        "tableId": "tbl_keyword",
+        "name": "related_to",
+        "comment": "",
+        "dataType": "INT",
+        "default": "",
+        "options": 8,
+        "ui": {
+          "keys": 2
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      }
+    },
+    "relationshipEntities": {
+      "rel_user_store": {
+        "id": "rel_user_store",
+        "identification": false,
+        "relationshipType": 8,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "tbl_user",
+          "columnIds": [
+            "col_user_store_id"
+          ],
+          "x": 250,
+          "y": 140,
+          "direction": 2
+        },
+        "end": {
+          "tableId": "tbl_store",
+          "columnIds": [
+            "col_store_store_id"
+          ],
+          "x": 350,
+          "y": 140,
+          "direction": 1
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "rel_store_review": {
+        "id": "rel_store_review",
+        "identification": false,
+        "relationshipType": 8,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "tbl_store",
+          "columnIds": [
+            "col_store_store_id"
+          ],
+          "x": 425,
+          "y": 180,
+          "direction": 3
+        },
+        "end": {
+          "tableId": "tbl_review",
+          "columnIds": [
+            "col_review_store_id"
+          ],
+          "x": 425,
+          "y": 300,
+          "direction": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      },
+      "rel_store_competitor": {
+        "id": "rel_store_competitor",
+        "identification": false,
+        "relationshipType": 8,
+        "startRelationshipType": 1,
+        "start": {
+          "tableId": "tbl_store",
+          "columnIds": [
+            "col_store_store_id"
+          ],
+          "x": 425,
+          "y": 180,
+          "direction": 3
+        },
+        "end": {
+          "tableId": "tbl_competitor",
+          "columnIds": [
+            "col_competitor_store_id"
+          ],
+          "x": 670,
+          "y": 300,
+          "direction": 0
+        },
+        "meta": {
+          "updateAt": 1755513600000,
+          "createAt": 1755513600000
+        }
+      }
+    },
+    "indexEntities": {},
+    "indexColumnEntities": {},
+    "memoEntities": {}
+  }
+}

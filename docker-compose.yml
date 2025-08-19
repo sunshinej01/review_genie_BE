@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  postgres-db:
+    image: postgres:13
+    container_name: review-genie-db
+    environment:
+      POSTGRES_USER: kt
+      POSTGRES_PASSWORD: kt123
+      POSTGRES_DB: review_genie
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
