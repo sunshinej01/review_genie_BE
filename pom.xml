@@ -43,12 +43,9 @@
 			<version>4.5.6</version>
 			<classifier>models</classifier>
 		</dependency>
-		<dependency>
-			<groupId>edu.stanford.nlp</groupId>
-			<artifactId>stanford-korean</artifactId>
-			<version>4.5.6</version>
-			<classifier>models</classifier>
-		</dependency>
+
+		<!-- 한국어 NLP - 경량화된 패턴 기반 접근법 사용 (외부 라이브러리 불필요) -->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
