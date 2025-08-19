@@ -219,14 +219,19 @@ public class KoreanNLPService {
         for (String sentence : sentences) {
             List<String> tokens = tokenizeSimple(sentence);
             
-            // 문장에서 발견된 키워드들
+            // 문장에서 발견된 키워드들과 관련 감성어 찾기
             Set<String> foundKeywords = new HashSet<>();
+            
+            // 1. 직접적인 키워드 매칭
             for (String token : tokens) {
                 String normalized = normalizeNoun(token);
                 if (KEY_TERMS.contains(normalized)) {
                     foundKeywords.add(normalized);
                 }
             }
+            
+            // 2. 간접적인 키워드 추론 (감성어를 통한 키워드 추론)
+            foundKeywords.addAll(inferKeywordsFromContext(tokens));
             
             if (foundKeywords.isEmpty()) {
                 continue; // 키워드가 없는 문장은 스킵
@@ -251,9 +256,21 @@ public class KoreanNLPService {
     }
     
     /**
-     * [NEW] 문장 내에서 특정 키워드의 감성 분석 (사전 기반 + 컨텍스트)
+     * [NEW] 문장 내에서 특정 키워드의 감성 분석 (맥락 기반 분석)
      */
     private String analyzeKeywordSentimentInSentence(String sentence, String keyword, List<String> tokens) {
+        // 1. 키워드 위치 찾기
+        int keywordIndex = findKeywordIndex(tokens, keyword);
+        if (keywordIndex == -1) {
+            return null; // 키워드가 없으면 분석 불가
+        }
+        
+        // 2. 키워드 주변 윈도우 설정 (앞뒤 3개 토큰)
+        int windowSize = 3;
+        int startIndex = Math.max(0, keywordIndex - windowSize);
+        int endIndex = Math.min(tokens.size(), keywordIndex + windowSize + 1);
+        
+        // 3. 윈도우 내 토큰들에서 감성어 찾기
         Set<String> positiveWords = KEYWORD_POSITIVE_WORDS.getOrDefault(keyword, Set.of());
         Set<String> negativeWords = KEYWORD_NEGATIVE_WORDS.getOrDefault(keyword, Set.of());
         
@@ -261,9 +278,12 @@ public class KoreanNLPService {
         boolean hasNegative = false;
         boolean hasNegativeContext = false;
         
-        // 토큰들을 순회하며 감성어 및 부정 맥락어 검사
-        for (String token : tokens) {
+        List<String> contextWords = new ArrayList<>();
+        
+        for (int i = startIndex; i < endIndex; i++) {
+            String token = tokens.get(i);
             String normalized = normalizeNoun(token);
+            contextWords.add(token);
             
             // 긍정어 검사
             for (String posWord : positiveWords) {
@@ -290,7 +310,13 @@ public class KoreanNLPService {
             }
         }
         
-        // 감성 판단 로직
+        // 4. 특별한 맥락 패턴 검사
+        String sentiment = analyzeSpecialPatterns(contextWords, keyword);
+        if (sentiment != null) {
+            return sentiment;
+        }
+        
+        // 5. 기본 감성 판단 로직
         if (hasNegative) {
             return "NEGATIVE";
         } else if (hasPositive && hasNegativeContext) {
@@ -300,7 +326,7 @@ public class KoreanNLPService {
             return "POSITIVE";
         }
         
-        // 사전에 없는 경우 기존 전체 감성분석 로직 사용
+        // 6. 감성어가 없는 경우 전체 문장 감성 사용
         Map<String, Object> sentimentResult = analyzeSentiment(sentence);
         String overallSentiment = (String) sentimentResult.get("sentiment");
         
@@ -309,6 +335,111 @@ public class KoreanNLPService {
         }
         
         return overallSentiment;
+    }
+    
+    /**
+     * [NEW] 키워드 위치 찾기
+     */
+    private int findKeywordIndex(List<String> tokens, String keyword) {
+        for (int i = 0; i < tokens.size(); i++) {
+            String normalized = normalizeNoun(tokens.get(i));
+            if (keyword.equals(normalized)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    /**
+     * [NEW] 특별한 맥락 패턴 분석
+     */
+    private String analyzeSpecialPatterns(List<String> contextWords, String keyword) {
+        String contextText = String.join(" ", contextWords);
+        
+        // 키워드별 특별 패턴 정의
+        switch (keyword) {
+            case "인테리어":
+                if (containsAny(contextText, Arrays.asList("러블리", "예쁘", "꾸며져", "아기자기", "멋지", "이쁘"))) {
+                    return "POSITIVE";
+                }
+                break;
+                
+            case "맛":
+                if (containsAny(contextText, Arrays.asList("짱", "맛있", "맛나", "달콤", "고소"))) {
+                    return "POSITIVE";
+                }
+                if (containsAny(contextText, Arrays.asList("달고 진해서", "아쉬웠어요", "별로"))) {
+                    return "NEGATIVE";
+                }
+                break;
+                
+            case "대기시간":
+                if (containsAny(contextText, Arrays.asList("줄서", "기다려", "웨이팅", "길어", "오래"))) {
+                    return "NEGATIVE";
+                }
+                if (containsAny(contextText, Arrays.asList("바로", "금방", "빠르"))) {
+                    return "POSITIVE";
+                }
+                break;
+                
+            case "서비스":
+                if (containsAny(contextText, Arrays.asList("친절", "세심", "배려", "정성"))) {
+                    return "POSITIVE";
+                }
+                if (containsAny(contextText, Arrays.asList("불친절", "불만", "실망"))) {
+                    return "NEGATIVE";
+                }
+                break;
+        }
+        
+        return null; // 특별 패턴 없음
+    }
+    
+    /**
+     * [NEW] 텍스트에 특정 단어들 중 하나라도 포함되어 있는지 확인
+     */
+    private boolean containsAny(String text, List<String> words) {
+        for (String word : words) {
+            if (text.contains(word)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * [NEW] 감성어를 통한 키워드 추론
+     */
+    private Set<String> inferKeywordsFromContext(List<String> tokens) {
+        Set<String> inferredKeywords = new HashSet<>();
+        String sentenceText = String.join(" ", tokens);
+        
+        // 인테리어 관련 감성어가 있으면 인테리어 키워드 추론
+        if (containsAny(sentenceText, Arrays.asList("러블리", "예쁜", "예쁘", "꾸며져", "아기자기", "멋지", "이쁘", "분위기", "인테리어"))) {
+            inferredKeywords.add("인테리어");
+        }
+        
+        // 맛 관련 감성어가 있으면 맛 키워드 추론
+        if (containsAny(sentenceText, Arrays.asList("맛있", "맛나", "짱", "달콤", "고소", "맛없", "별로", "달고", "진해", "맛집"))) {
+            inferredKeywords.add("맛");
+        }
+        
+        // 대기시간 관련 감성어가 있으면 대기시간 키워드 추론
+        if (containsAny(sentenceText, Arrays.asList("줄서", "기다려", "웨이팅", "대기", "길어", "오래", "바로", "금방", "빠르"))) {
+            inferredKeywords.add("대기시간");
+        }
+        
+        // 서비스 관련 감성어가 있으면 서비스 키워드 추론
+        if (containsAny(sentenceText, Arrays.asList("친절", "불친절", "서비스", "직원", "배려", "정성", "세심"))) {
+            inferredKeywords.add("서비스");
+        }
+        
+        // 메뉴 관련 감성어가 있으면 메뉴 키워드 추론
+        if (containsAny(sentenceText, Arrays.asList("디저트", "케이크", "음료", "종류", "다양", "선택", "메뉴"))) {
+            inferredKeywords.add("메뉴");
+        }
+        
+        return inferredKeywords;
     }
     
     /**
