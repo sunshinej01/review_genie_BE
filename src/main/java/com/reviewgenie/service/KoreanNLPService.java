@@ -1,5 +1,8 @@
 package com.reviewgenie.service;
 
+import com.reviewgenie.domain.Keyword;
+import com.reviewgenie.repository.KeywordRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
@@ -13,7 +16,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class KoreanNLPService {
+
+    private final KeywordRepository keywordRepository;
 
     // 간단한 한국어 패턴 매칭 기반 분석기
     private static final Pattern KOREAN_PATTERN = Pattern.compile("[가-힣]+");
@@ -136,6 +142,81 @@ public class KoreanNLPService {
     }
 
     /**
+     * 키워드 순위 분석 결과를 추출 (빈도와 순위 포함)
+     */
+    public Map<String, Object> extractKeywordRankings(String text) {
+        Map<String, Object> analysis = analyzeMorphemes(text);
+        
+        @SuppressWarnings("unchecked")
+        List<String> nouns = (List<String>) analysis.get("nouns");
+        
+        Map<String, Object> result = new HashMap<>();
+        List<Map<String, Object>> rankings = new ArrayList<>();
+        
+        if (nouns == null || nouns.isEmpty()) {
+            result.put("rankings", rankings);
+            result.put("totalKeywords", 0);
+            return result;
+        }
+        
+        // 단어 빈도 계산 및 순위 생성
+        Map<String, Long> frequency = nouns.stream()
+            .filter(noun -> noun.length() > 1) // 1글자 제외
+            .filter(noun -> !isStopWord(noun)) // 불용어 제외
+            .filter(noun -> !isSpecialChar(noun)) // 특수문자 제외
+            .collect(Collectors.groupingBy(
+                noun -> noun, 
+                Collectors.counting()
+            ));
+        
+        // 순위별로 정렬하여 결과 생성
+        int rank = 1;
+        for (Map.Entry<String, Long> entry : frequency.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .limit(10) // 상위 10개
+                .collect(Collectors.toList())) {
+            
+            Map<String, Object> keywordInfo = new HashMap<>();
+            keywordInfo.put("word", entry.getKey());
+            keywordInfo.put("frequency", entry.getValue());
+            keywordInfo.put("rank", rank++);
+            rankings.add(keywordInfo);
+        }
+        
+        result.put("rankings", rankings);
+        result.put("totalKeywords", frequency.size());
+        
+        return result;
+    }
+
+    /**
+     * 키워드 순위 분석 결과를 DB에 저장
+     */
+    public List<Keyword> saveKeywordsToDatabase(String text) {
+        Map<String, Object> keywordRankings = extractKeywordRankings(text);
+        
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> rankings = (List<Map<String, Object>>) keywordRankings.get("rankings");
+        
+        List<Keyword> savedKeywords = new ArrayList<>();
+        
+        for (Map<String, Object> ranking : rankings) {
+            String word = (String) ranking.get("word");
+            
+            // 중복 체크 후 저장
+            if (!keywordRepository.existsByWord(word)) {
+                Keyword keyword = Keyword.builder()
+                        .word(word)
+                        .build();
+                savedKeywords.add(keywordRepository.save(keyword));
+            }
+        }
+        
+        return savedKeywords;
+    }
+
+    /**
      * 한국어 감정 분석 (룰 기반)
      */
     public Map<String, Object> analyzeSentiment(String text) {
@@ -143,7 +224,7 @@ public class KoreanNLPService {
         
         // 감정 키워드 사전 (확장 가능)
         Set<String> positiveWords = Set.of(
-            "좋", "훌륭", "최고", "만족", "추천", "괜찮", "맛있", "훌륭", 
+            "좋", "훌륭", "최고", "만족", "추천", "괜찮", "맛있", 
             "친절", "깨끗", "빠르", "편리", "감사", "완벽", "멋지", "사랑",
             "기쁘", "행복", "즐거", "재미", "신선", "맛", "품질", "서비스"
         );
