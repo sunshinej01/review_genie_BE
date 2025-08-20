@@ -68,7 +68,7 @@ public class DataIntegrationService {
                             .sentiment(sentiment)
                             .build();
                     Review savedReview = reviewRepository.save(review);
-                    System.out.println("DB 저장 완료 - ID: " + savedReview.getId());
+                    System.out.println("DB 저장 완료 - ID: " + savedReview.getReviewId());
                 }
                 System.out.println("=== 총 " + count + "개의 리뷰 처리 완료 ===");
             } else {
@@ -97,8 +97,6 @@ public class DataIntegrationService {
                 
                 // 4. DTO를 Entity로 변환 (store_id 등 추가 정보는 비즈니스 로직에 따라 설정)
                 return Review.builder()
-                        .platform(dto.getPlatform())
-                        .rating(dto.getRating())
                         .content(dto.getContent())
                         .sentiment(sentiment)
                         .createdAt(dto.getCreatedAt())

@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface CoreKeywordSentimentRepository extends JpaRepository<CoreKeywordSentiment, Long> {
     
-    @Query("SELECT c FROM CoreKeywordSentiment c WHERE c.store.storeId = :storeId")
+    @Query("SELECT c FROM CoreKeywordSentiment c WHERE c.store.id = :storeId")
     List<CoreKeywordSentiment> findByStoreId(@Param("storeId") Long storeId);
     
-    @Query("SELECT c FROM CoreKeywordSentiment c WHERE c.store.storeId = :storeId AND c.keyword.keywordId = :keywordId")
+    @Query("SELECT c FROM CoreKeywordSentiment c WHERE c.store.id = :storeId AND c.keyword.keywordId = :keywordId")
     Optional<CoreKeywordSentiment> findByStoreIdAndKeywordId(@Param("storeId") Long storeId, @Param("keywordId") Long keywordId);
     
     @Query("SELECT c FROM CoreKeywordSentiment c WHERE c.keyword.keywordId = :keywordId ORDER BY (c.positiveCount + c.negativeCount) DESC")

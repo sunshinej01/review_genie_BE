@@ -97,7 +97,7 @@ public class KeywordAnalysisService {
     private TopGeneralKeywordDto convertToDto(TopGeneralKeyword entity) {
         return TopGeneralKeywordDto.builder()
                 .topKeywordId(entity.getTopKeywordId())
-                .storeId(entity.getStore().getStoreId())
+                .storeId(entity.getStore().getId())
                 .storeName(entity.getStore().getStoreName())
                 .keyword(entity.getKeyword())
                 .frequency(entity.getFrequency())
@@ -108,7 +108,7 @@ public class KeywordAnalysisService {
     private CoreKeywordSentimentDto convertToDto(CoreKeywordSentiment entity) {
         return CoreKeywordSentimentDto.builder()
                 .sentimentId(entity.getSentimentId())
-                .storeId(entity.getStore().getStoreId())
+                .storeId(entity.getStore().getId())
                 .storeName(entity.getStore().getStoreName())
                 .keywordId(entity.getKeyword().getKeywordId())
                 .keywordName(entity.getKeyword().getKeywordName())

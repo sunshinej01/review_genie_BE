@@ -11,12 +11,12 @@ import java.util.List;
 @Repository
 public interface TopGeneralKeywordRepository extends JpaRepository<TopGeneralKeyword, Long> {
     
-    @Query("SELECT t FROM TopGeneralKeyword t WHERE t.store.storeId = :storeId ORDER BY t.frequency DESC")
+    @Query("SELECT t FROM TopGeneralKeyword t WHERE t.store.id = :storeId ORDER BY t.frequency DESC")
     List<TopGeneralKeyword> findByStoreIdOrderByFrequencyDesc(@Param("storeId") Long storeId);
     
-    @Query("SELECT t FROM TopGeneralKeyword t WHERE t.store.storeId = :storeId AND t.frequency >= :minFrequency")
+    @Query("SELECT t FROM TopGeneralKeyword t WHERE t.store.id = :storeId AND t.frequency >= :minFrequency")
     List<TopGeneralKeyword> findByStoreIdAndFrequencyGreaterThanEqual(@Param("storeId") Long storeId, @Param("minFrequency") Integer minFrequency);
     
-    @Query("DELETE FROM TopGeneralKeyword t WHERE t.store.storeId = :storeId")
+    @Query("DELETE FROM TopGeneralKeyword t WHERE t.store.id = :storeId")
     void deleteByStoreId(@Param("storeId") Long storeId);
 }

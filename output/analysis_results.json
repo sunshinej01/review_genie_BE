@@ -1,0 +1,552 @@
+{
+  "top_general_keyword" : [ {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 1,
+    "keyword" : "케이크",
+    "frequency" : 88
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 2,
+    "keyword" : "디저트",
+    "frequency" : 44
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 3,
+    "keyword" : "딸기",
+    "frequency" : 35
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 4,
+    "keyword" : "글루텐",
+    "frequency" : 27
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 5,
+    "keyword" : "카페",
+    "frequency" : 24
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 6,
+    "keyword" : "분위기",
+    "frequency" : 22
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 7,
+    "keyword" : "종류",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 8,
+    "keyword" : "글루텐프리",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 9,
+    "keyword" : "맛있고",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 10,
+    "keyword" : "케잌",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 11,
+    "keyword" : "커피",
+    "frequency" : 17
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 12,
+    "keyword" : "크림",
+    "frequency" : 17
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 13,
+    "keyword" : "많아서",
+    "frequency" : 15
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 14,
+    "keyword" : "다음에",
+    "frequency" : 15
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 15,
+    "keyword" : "웨이팅",
+    "frequency" : 15
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8652806",
+    "store_name" : "카페페퍼",
+    "rank" : 16,
+    "keyword" : "맛있게",
+    "frequency" : 13
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8662916",
+    "store_name" : "카페페퍼",
+    "rank" : 17,
+    "keyword" : "케익",
+    "frequency" : 13
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8662916",
+    "store_name" : "카페페퍼",
+    "rank" : 18,
+    "keyword" : "타르트",
+    "frequency" : 12
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8662916",
+    "store_name" : "카페페퍼",
+    "rank" : 19,
+    "keyword" : "음료",
+    "frequency" : 11
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.8662916",
+    "store_name" : "카페페퍼",
+    "rank" : 20,
+    "keyword" : "얼그레",
+    "frequency" : 11
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0861605",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 1,
+    "keyword" : "베이글",
+    "frequency" : 177
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 2,
+    "keyword" : "웨이팅",
+    "frequency" : 59
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 3,
+    "keyword" : "런던베이글",
+    "frequency" : 43
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 4,
+    "keyword" : "대기",
+    "frequency" : 39
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 5,
+    "keyword" : "크림치즈",
+    "frequency" : 37
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 6,
+    "keyword" : "평일",
+    "frequency" : 34
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 7,
+    "keyword" : "바로",
+    "frequency" : 29
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 8,
+    "keyword" : "매장",
+    "frequency" : 28
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 9,
+    "keyword" : "직원분들",
+    "frequency" : 24
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 10,
+    "keyword" : "종류",
+    "frequency" : 23
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 11,
+    "keyword" : "런베뮤",
+    "frequency" : 21
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 12,
+    "keyword" : "입장",
+    "frequency" : 17
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 13,
+    "keyword" : "오후",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 14,
+    "keyword" : "먹고",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0871571",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 15,
+    "keyword" : "금방",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0881595",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 16,
+    "keyword" : "엄청",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0881595",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 17,
+    "keyword" : "느낌",
+    "frequency" : 14
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0881595",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 18,
+    "keyword" : "피칸",
+    "frequency" : 13
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0881595",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 19,
+    "keyword" : "캐치테이블",
+    "frequency" : 13
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0886454",
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "rank" : 20,
+    "keyword" : "버터",
+    "frequency" : 13
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 1,
+    "keyword" : "파이",
+    "frequency" : 60
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 2,
+    "keyword" : "디저트",
+    "frequency" : 29
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 3,
+    "keyword" : "파이홀",
+    "frequency" : 27
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 4,
+    "keyword" : "맛있고",
+    "frequency" : 18
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 5,
+    "keyword" : "신촌",
+    "frequency" : 15
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 6,
+    "keyword" : "많아서",
+    "frequency" : 14
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 7,
+    "keyword" : "커피",
+    "frequency" : 14
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 8,
+    "keyword" : "종류",
+    "frequency" : 13
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 9,
+    "keyword" : "엄청",
+    "frequency" : 13
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 10,
+    "keyword" : "오늘",
+    "frequency" : 12
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 11,
+    "keyword" : "케이크",
+    "frequency" : 12
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 12,
+    "keyword" : "분위기",
+    "frequency" : 12
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 13,
+    "keyword" : "먹고",
+    "frequency" : 11
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1789686",
+    "store_name" : "파이홀",
+    "rank" : 14,
+    "keyword" : "다음에",
+    "frequency" : 11
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1799831",
+    "store_name" : "파이홀",
+    "rank" : 15,
+    "keyword" : "카페",
+    "frequency" : 11
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1799831",
+    "store_name" : "파이홀",
+    "rank" : 16,
+    "keyword" : "항상",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1799831",
+    "store_name" : "파이홀",
+    "rank" : 17,
+    "keyword" : "유명한",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1799831",
+    "store_name" : "파이홀",
+    "rank" : 18,
+    "keyword" : "음료",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1799831",
+    "store_name" : "파이홀",
+    "rank" : 19,
+    "keyword" : "맛집",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1799831",
+    "store_name" : "파이홀",
+    "rank" : 20,
+    "keyword" : "바노피",
+    "frequency" : 9
+  } ],
+  "core_keyword_sentiment" : [ {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.5731658",
+    "positive_count" : 4,
+    "store_name" : "카페페퍼",
+    "negative_count" : 2,
+    "keyword" : "포장"
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.5731658",
+    "positive_count" : 5,
+    "store_name" : "카페페퍼",
+    "negative_count" : 1,
+    "keyword" : "메뉴"
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.5731658",
+    "positive_count" : 7,
+    "store_name" : "카페페퍼",
+    "negative_count" : 0,
+    "keyword" : "인테리어"
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.5731658",
+    "positive_count" : 21,
+    "store_name" : "카페페퍼",
+    "negative_count" : 4,
+    "keyword" : "맛"
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.5731658",
+    "positive_count" : 2,
+    "store_name" : "카페페퍼",
+    "negative_count" : 1,
+    "keyword" : "가격"
+  }, {
+    "store_id" : 1,
+    "last_updated" : "2025-08-20T13:29:42.5731658",
+    "positive_count" : 1,
+    "store_name" : "카페페퍼",
+    "negative_count" : 0,
+    "keyword" : "예약"
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0210261",
+    "positive_count" : 10,
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "negative_count" : 1,
+    "keyword" : "포장"
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0210261",
+    "positive_count" : 5,
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "negative_count" : 1,
+    "keyword" : "메뉴"
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0210261",
+    "positive_count" : 9,
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "negative_count" : 0,
+    "keyword" : "인테리어"
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0210261",
+    "positive_count" : 1,
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "negative_count" : 0,
+    "keyword" : "청결"
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0210261",
+    "positive_count" : 24,
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "negative_count" : 4,
+    "keyword" : "맛"
+  }, {
+    "store_id" : 2,
+    "last_updated" : "2025-08-20T13:29:43.0210261",
+    "positive_count" : 2,
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "negative_count" : 0,
+    "keyword" : "가격"
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1290183",
+    "positive_count" : 3,
+    "store_name" : "파이홀",
+    "negative_count" : 0,
+    "keyword" : "포장"
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1290183",
+    "positive_count" : 6,
+    "store_name" : "파이홀",
+    "negative_count" : 2,
+    "keyword" : "메뉴"
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1290183",
+    "positive_count" : 12,
+    "store_name" : "파이홀",
+    "negative_count" : 0,
+    "keyword" : "인테리어"
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1290183",
+    "positive_count" : 1,
+    "store_name" : "파이홀",
+    "negative_count" : 0,
+    "keyword" : "청결"
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1290183",
+    "positive_count" : 21,
+    "store_name" : "파이홀",
+    "negative_count" : 5,
+    "keyword" : "맛"
+  }, {
+    "store_id" : 3,
+    "last_updated" : "2025-08-20T13:29:43.1290183",
+    "positive_count" : 5,
+    "store_name" : "파이홀",
+    "negative_count" : 0,
+    "keyword" : "가격"
+  } ],
+  "source_file" : "reviews.json",
+  "timestamp" : "2025-08-20T13:29:42.3880531"
+}

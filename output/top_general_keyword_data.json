@@ -1,0 +1,366 @@
+{
+  "data" : [ {
+    "store_id" : 1,
+    "top_keyword_id" : 1,
+    "last_updated" : "2025-08-20T15:41:57.506684",
+    "keyword" : "케이크",
+    "frequency" : 88
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 2,
+    "last_updated" : "2025-08-20T15:41:57.506684",
+    "keyword" : "디저트",
+    "frequency" : 44
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 3,
+    "last_updated" : "2025-08-20T15:41:57.506684",
+    "keyword" : "딸기",
+    "frequency" : 35
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 4,
+    "last_updated" : "2025-08-20T15:41:57.506684",
+    "keyword" : "글루텐",
+    "frequency" : 27
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 5,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "카페",
+    "frequency" : 24
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 6,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "분위기",
+    "frequency" : 22
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 7,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "종류",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 8,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "글루텐프리",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 9,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "맛있고",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 10,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "케잌",
+    "frequency" : 19
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 11,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "커피",
+    "frequency" : 17
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 12,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "크림",
+    "frequency" : 17
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 13,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "많아서",
+    "frequency" : 15
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 14,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "다음에",
+    "frequency" : 15
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 15,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "웨이팅",
+    "frequency" : 15
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 16,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "맛있게",
+    "frequency" : 13
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 17,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "케익",
+    "frequency" : 13
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 18,
+    "last_updated" : "2025-08-20T15:41:57.5071984",
+    "keyword" : "타르트",
+    "frequency" : 12
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 19,
+    "last_updated" : "2025-08-20T15:41:57.5082147",
+    "keyword" : "음료",
+    "frequency" : 11
+  }, {
+    "store_id" : 1,
+    "top_keyword_id" : 20,
+    "last_updated" : "2025-08-20T15:41:57.5082147",
+    "keyword" : "얼그레",
+    "frequency" : 11
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 21,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "베이글",
+    "frequency" : 177
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 22,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "웨이팅",
+    "frequency" : 59
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 23,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "런던베이글",
+    "frequency" : 43
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 24,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "대기",
+    "frequency" : 39
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 25,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "크림치즈",
+    "frequency" : 37
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 26,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "평일",
+    "frequency" : 34
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 27,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "바로",
+    "frequency" : 29
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 28,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "매장",
+    "frequency" : 28
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 29,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "직원분들",
+    "frequency" : 24
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 30,
+    "last_updated" : "2025-08-20T15:41:58.6233926",
+    "keyword" : "종류",
+    "frequency" : 23
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 31,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "런베뮤",
+    "frequency" : 21
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 32,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "입장",
+    "frequency" : 17
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 33,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "오후",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 34,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "먹고",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 35,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "금방",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 36,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "엄청",
+    "frequency" : 15
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 37,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "느낌",
+    "frequency" : 14
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 38,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "피칸",
+    "frequency" : 13
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 39,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "캐치테이블",
+    "frequency" : 13
+  }, {
+    "store_id" : 2,
+    "top_keyword_id" : 40,
+    "last_updated" : "2025-08-20T15:41:58.6259054",
+    "keyword" : "버터",
+    "frequency" : 13
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 41,
+    "last_updated" : "2025-08-20T15:41:59.0615385",
+    "keyword" : "파이",
+    "frequency" : 60
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 42,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "디저트",
+    "frequency" : 29
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 43,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "파이홀",
+    "frequency" : 27
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 44,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "맛있고",
+    "frequency" : 18
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 45,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "신촌",
+    "frequency" : 15
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 46,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "많아서",
+    "frequency" : 14
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 47,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "커피",
+    "frequency" : 14
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 48,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "종류",
+    "frequency" : 13
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 49,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "엄청",
+    "frequency" : 13
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 50,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "오늘",
+    "frequency" : 12
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 51,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "케이크",
+    "frequency" : 12
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 52,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "분위기",
+    "frequency" : 12
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 53,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "먹고",
+    "frequency" : 11
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 54,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "다음에",
+    "frequency" : 11
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 55,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "카페",
+    "frequency" : 11
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 56,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "항상",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 57,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "유명한",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 58,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "음료",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 59,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "맛집",
+    "frequency" : 10
+  }, {
+    "store_id" : 3,
+    "top_keyword_id" : 60,
+    "last_updated" : "2025-08-20T15:41:59.0655134",
+    "keyword" : "바노피",
+    "frequency" : 9
+  } ],
+  "total_count" : 60,
+  "generated_at" : "2025-08-20T15:42:01.8252722",
+  "table_name" : "top_general_keyword"
+}

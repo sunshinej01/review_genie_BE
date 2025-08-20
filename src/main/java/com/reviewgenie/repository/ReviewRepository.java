@@ -17,7 +17,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     /**
      * 특정 매장의 리뷰 조회
      */
-    @Query("SELECT r FROM Review r WHERE r.store.storeId = :storeId")
+    @Query("SELECT r FROM Review r WHERE r.store.id = :storeId")
     List<Review> findByStoreId(@Param("storeId") Long storeId);
     
     /**

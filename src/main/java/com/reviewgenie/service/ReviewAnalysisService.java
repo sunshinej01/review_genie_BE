@@ -1,6 +1,10 @@
 package com.reviewgenie.service;
 
+import com.reviewgenie.domain.Review;
+import com.reviewgenie.domain.Store;
 import com.reviewgenie.dto.ReviewDto;
+import com.reviewgenie.repository.ReviewRepository;
+import com.reviewgenie.repository.StoreRepository;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -8,11 +12,14 @@ import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.util.CoreMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,14 +27,67 @@ public class ReviewAnalysisService {
 
     private final StanfordCoreNLP stanfordCoreNLP;
     private final KoreanNLPService koreanNLPService;
+    private final ReviewRepository reviewRepository;
+    private final StoreRepository storeRepository;
 
     // 간단한 한국어 불용어 목록 (필요에 따라 확장)
     private static final List<String> STOPWORDS = Arrays.asList(
         "이", "그", "저", "것", "수", "등", "및", "제", "저희"
     );
 
-	public List<ReviewDto> getSampleReviews() {
-		return Collections.emptyList();
+	/**
+	 * 리뷰 저장
+	 */
+	@Transactional
+	public Review saveReview(Long storeId, String content) {
+		Store store = storeRepository.findById(storeId)
+				.orElseThrow(() -> new RuntimeException("Store not found"));
+		
+		String sentiment = analyzeSentiment(content);
+		
+		Review review = Review.builder()
+				.store(store)
+				.content(content)
+				.sentiment(sentiment)
+				.createdAt(LocalDateTime.now())
+				.build();
+		
+		return reviewRepository.save(review);
+	}
+	
+	/**
+	 * 상점별 리뷰 조회
+	 */
+	public List<ReviewDto> getReviewsByStore(Long storeId) {
+		List<Review> reviews = reviewRepository.findByStoreId(storeId);
+		return reviews.stream()
+				.map(this::convertToDto)
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * 감정별 리뷰 통계
+	 */
+	public Map<String, Long> getSentimentStatistics() {
+		List<Object[]> stats = reviewRepository.getSentimentStatistics();
+		return stats.stream()
+				.collect(Collectors.toMap(
+					row -> (String) row[0],
+					row -> (Long) row[1]
+				));
+	}
+	
+	/**
+	 * DTO 변환
+	 */
+	private ReviewDto convertToDto(Review review) {
+		return ReviewDto.builder()
+				.reviewId(review.getReviewId())
+				.storeId(review.getStore().getId())
+				.content(review.getContent())
+				.sentiment(review.getSentiment())
+				.createdAt(review.getCreatedAt())
+				.build();
 	}
 
     public String analyzeSentiment(String reviewText) {

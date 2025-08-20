@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reviewgenie.domain.Review;
 import com.reviewgenie.domain.Store;
+import com.reviewgenie.domain.User;
 import com.reviewgenie.repository.ReviewRepository;
 import com.reviewgenie.repository.StoreRepository;
+import com.reviewgenie.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -29,6 +32,7 @@ public class ReviewBatchService {
     private final KoreanNLPService koreanNLPService;
     private final StoreRepository storeRepository;
     private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
     /**
      * reviews.json 파일을 읽고 감성분석 후 결과 출력 (pos/neg만)
@@ -55,18 +59,22 @@ public class ReviewBatchService {
     }
 
     /**
-     * reviews.json 파일을 읽고 감성분석 후 DB에 저장 (pos/neg만)
+     * reviews.json 파일을 읽고 감성분석 후 DB에 저장 (최초 DB 생성시에만)
+     * 이미 데이터가 있으면 저장하지 않음
      */
     @Transactional
     public void processReviewsFromJson() {
         try {
-            log.info("🚀 리뷰 배치 처리 시작 (POSITIVE/NEGATIVE 분류만)");
+            log.info("🚀 리뷰 배치 처리 시작 (최초 DB 생성시에만)");
             
-            // 1. JSON 파일 읽기
+            // 1. 기존 데이터 확인
+            if (hasExistingData()) {
+                log.info("⚠️ 이미 데이터가 존재합니다. 최초 DB 생성시에만 실행됩니다.");
+                return;
+            }
+            
+            // 2. JSON 파일 읽기
             JsonNode rootNode = readJsonFile();
-            
-            // 2. 기존 데이터 정리 (옵션)
-            clearExistingData();
             
             // 3. My_store 처리
             processMyStore(rootNode);
@@ -83,21 +91,18 @@ public class ReviewBatchService {
     }
 
     /**
+     * 기존 데이터가 있는지 확인
+     */
+    private boolean hasExistingData() {
+        return storeRepository.count() > 0 || reviewRepository.count() > 0;
+    }
+
+    /**
      * JSON 파일 읽기
      */
     private JsonNode readJsonFile() throws IOException {
         ClassPathResource resource = new ClassPathResource("data/reviews.json");
         return objectMapper.readTree(resource.getInputStream());
-    }
-
-    /**
-     * 기존 데이터 정리 (선택사항)
-     */
-    private void clearExistingData() {
-        log.info("🧹 기존 데이터 정리 중...");
-        reviewRepository.deleteAll();
-        storeRepository.deleteAll();
-        log.info("✅ 기존 데이터 정리 완료");
     }
 
     /**
@@ -133,10 +138,11 @@ public class ReviewBatchService {
             return;
         }
         
-        // Store 생성
-        Store myStore = createStore(
+        // Store 생성 또는 조회
+        Store myStore = findOrCreateStore(
             myStoreNode.path("place_id").asText(),
             myStoreNode.path("place_name").asText(),
+            myStoreNode.path("count").asInt(),
             "MY_STORE"
         );
         
@@ -189,10 +195,11 @@ public class ReviewBatchService {
         int totalReviews = 0;
         
         for (JsonNode competitorNode : competitorsNode) {
-            // Store 생성
-            Store competitorStore = createStore(
+            // Store 생성 또는 조회
+            Store competitorStore = findOrCreateStore(
                 competitorNode.path("place_id").asText(),
                 competitorNode.path("place_name").asText(),
+                competitorNode.path("count").asInt(),
                 "COMPETITOR"
             );
             
@@ -205,6 +212,63 @@ public class ReviewBatchService {
         }
         
         log.info("✅ Competitors 처리 완료: {} 개 매장, {} 개 리뷰", totalCompetitors, totalReviews);
+    }
+
+    /**
+     * Store를 찾거나 생성 (중복 방지)
+     */
+    private Store findOrCreateStore(String placeId, String placeName, int reviewCount, String storeType) {
+        // 기존 Store가 있는지 확인
+        Optional<Store> existingStore = storeRepository.findByPlaceId(placeId);
+        
+        if (existingStore.isPresent()) {
+            log.info("🏪 기존 Store 사용: {} ({})", placeName, storeType);
+            return existingStore.get();
+        }
+        
+        // 새로운 Store 생성
+        Store store = createStore(placeId, placeName, reviewCount, storeType);
+        log.info("🏪 새 Store 생성: {} ({})", placeName, storeType);
+        
+        return store;
+    }
+
+    /**
+     * Store 생성 및 저장
+     */
+    private Store createStore(String placeId, String placeName, int reviewCount, String storeType) {
+        // User는 기존 것을 사용하거나 생성
+        User user = findOrCreateUser();
+        
+        Store store = Store.builder()
+            .placeId(placeId)
+            .storeName(placeName)
+            .location("Unknown")
+            .reviewCount(reviewCount)
+            .user(user)
+            .build();
+        
+        return storeRepository.save(store);
+    }
+
+    /**
+     * User를 찾거나 생성
+     */
+    private User findOrCreateUser() {
+        // 기존 User가 있는지 확인 (username으로)
+        Optional<User> existingUser = userRepository.findByUsername("review_genie_user");
+        
+        if (existingUser.isPresent()) {
+            return existingUser.get();
+        }
+        
+        // 새로운 User 생성
+        User newUser = User.builder()
+            .username("review_genie_user")
+            .password("review_genie_password")
+            .build();
+        
+        return userRepository.save(newUser);
     }
 
     /**
@@ -249,29 +313,13 @@ public class ReviewBatchService {
     }
 
     /**
-     * Store 생성 및 저장
-     */
-    private Store createStore(String placeId, String placeName, String storeType) {
-        Store store = Store.builder()
-            .name(placeName)
-            .storeId(placeId)
-            .storeType(storeType)
-            .build();
-        
-        Store savedStore = storeRepository.save(store);
-        log.info("🏪 Store 저장: {} ({})", placeName, storeType);
-        
-        return savedStore;
-    }
-
-    /**
      * 리뷰 배열 처리 (DB 저장용)
      */
     private List<Review> processReviews(JsonNode reviewsNode, Store store) {
         List<Review> processedReviews = new ArrayList<>();
         
         if (!reviewsNode.isArray()) {
-            log.warn("⚠️ 리뷰 데이터가 배열이 아닙니다: {}", store.getName());
+            log.warn("⚠️ 리뷰 데이터가 배열이 아닙니다: {}", store.getStoreName());
             return processedReviews;
         }
         
@@ -288,8 +336,6 @@ public class ReviewBatchService {
             Review review = Review.builder()
                 .store(store)
                 .content(cleanedText)
-                .platform("JSON_DATA")
-                .rating(0.0f) // JSON에 평점이 없으므로 기본값
                 .sentiment(sentiment)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -297,7 +343,7 @@ public class ReviewBatchService {
             Review savedReview = reviewRepository.save(review);
             processedReviews.add(savedReview);
             
-            log.info("📝 리뷰 저장: {} - {}", store.getName(), sentiment);
+            log.info("📝 리뷰 저장: {} - {}", store.getStoreName(), sentiment);
         }
         
         return processedReviews;
@@ -311,7 +357,7 @@ public class ReviewBatchService {
             return "";
         }
         
-        // 1. 이모지 및 특수문자 정리 (cleanText 메서드가 없으므로 직접 구현)
+        // 1. 이모지 및 특수문자 정리
         String cleaned = reviewText.replaceAll("[^가-힣a-zA-Z0-9\\s]", " ");
         
         // 2. 줄바꿈 문자를 공백으로 변경

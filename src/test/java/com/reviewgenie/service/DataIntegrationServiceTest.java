@@ -47,7 +47,7 @@ public class DataIntegrationServiceTest {
         for (int i = 0; i < savedReviews.size(); i++) {
             Review review = savedReviews.get(i);
             System.out.println("리뷰 " + (i + 1) + ":");
-            System.out.println("  ID: " + review.getId());
+            System.out.println("  ID: " + review.getReviewId());
             System.out.println("  Content: " + (review.getContent().length() > 100 ? 
                 review.getContent().substring(0, 100) + "..." : review.getContent()));
             System.out.println("  Sentiment: " + review.getSentiment());
@@ -55,7 +55,7 @@ public class DataIntegrationServiceTest {
             System.out.println();
             
             // 필수 필드 검증
-            assertThat(review.getId()).isNotNull();
+            assertThat(review.getReviewId()).isNotNull();
             assertThat(review.getContent()).isNotNull().isNotEmpty();
             assertThat(review.getSentiment()).isNotNull().isNotEmpty();
         }
@@ -77,17 +77,17 @@ public class DataIntegrationServiceTest {
         Review savedReview = reviewRepository.save(testReview);
         
         System.out.println("테스트 리뷰 저장 성공:");
-        System.out.println("  ID: " + savedReview.getId());
+        System.out.println("  ID: " + savedReview.getReviewId());
         System.out.println("  Content: " + savedReview.getContent());
         System.out.println("  Sentiment: " + savedReview.getSentiment());
         
         // 검증
-        assertThat(savedReview.getId()).isNotNull();
+        assertThat(savedReview.getReviewId()).isNotNull();
         assertThat(savedReview.getContent()).isEqualTo("테스트 리뷰입니다.");
         assertThat(savedReview.getSentiment()).isEqualTo("POSITIVE");
         
         // DB에서 다시 조회
-        Review foundReview = reviewRepository.findById(savedReview.getId()).orElse(null);
+        Review foundReview = reviewRepository.findById(savedReview.getReviewId()).orElse(null);
         assertThat(foundReview).isNotNull();
         assertThat(foundReview.getContent()).isEqualTo("테스트 리뷰입니다.");
         
