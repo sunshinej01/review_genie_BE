@@ -9,22 +9,23 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "store")
 public class Store {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	@Column(nullable = false)
-	private String name;
-
-	private String address;
-	
 	@Column(name = "store_id")
-	private String storeId; // JSON의 place_id
-	
-	@Column(name = "store_type")
-	private String storeType; // MY_STORE, COMPETITOR
+	private Long storeId;
+
+	@Column(name = "store_name", nullable = false)
+	private String storeName;
+
+	@Column(name = "location")
+	private String location;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 }
 
 

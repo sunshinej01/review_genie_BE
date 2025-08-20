@@ -17,18 +17,13 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     /**
      * 특정 매장의 리뷰 조회
      */
-    List<Review> findByStoreId(Long storeId);
+    @Query("SELECT r FROM Review r WHERE r.store.storeId = :storeId")
+    List<Review> findByStoreId(@Param("storeId") Long storeId);
     
     /**
      * 감정별 리뷰 조회
      */
     List<Review> findBySentiment(String sentiment);
-    
-    /**
-     * 매장 타입별 리뷰 조회
-     */
-    @Query("SELECT r FROM Review r JOIN r.store s WHERE s.storeType = :storeType")
-    List<Review> findByStoreType(@Param("storeType") String storeType);
     
     /**
      * 감정 분석 통계 조회

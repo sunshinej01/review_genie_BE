@@ -8,8 +8,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class CompetitorDto {
-	private Long id;
-	private String name;
+	private Long storeId;
+	private String storeName;
+	private Long competitorStoreId;
+	private String competitorStoreName;
 }
 
 

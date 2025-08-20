@@ -9,18 +9,19 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "users") // PostgreSQL 예약어 'user' 회피
+@Table(name = "user")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name = "user_id")
+	private Long userId;
 
-	@Column(nullable = false, unique = true)
-	private String email;
+	@Column(name = "username", nullable = false)
+	private String username;
 
-	@Column(nullable = false)
-	private String name;
+	@Column(name = "password", nullable = false)
+	private String password;
 }
 
 

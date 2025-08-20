@@ -9,14 +9,16 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "keyword")
 public class Keyword {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name = "keyword_id")
+	private Long keywordId;
 
-	@Column(nullable = false)
-	private String word;
+	@Column(name = "keyword_name", nullable = false)
+	private String keywordName;
 }
 
 
