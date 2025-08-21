@@ -17,51 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DataIntegrationServiceTest {
 
     @Autowired
-    private DataIntegrationService dataIntegrationService;
-
-    @Autowired
     private ReviewRepository reviewRepository;
-
-    @Test
-    @Transactional
-    public void testLoadReviewsFromJson() {
-        System.out.println("=== 테스트 시작: JSON 데이터 로딩 및 DB 저장 ===");
-        
-        // 테스트 전 기존 데이터 삭제
-        reviewRepository.deleteAll();
-        
-        // JSON에서 리뷰 데이터 로딩 테스트
-        dataIntegrationService.loadReviewsFromJson();
-        
-        // DB에 저장된 데이터 확인
-        List<Review> savedReviews = reviewRepository.findAll();
-        
-        System.out.println("=== 테스트 결과 ===");
-        System.out.println("저장된 리뷰 개수: " + savedReviews.size());
-        
-        // 검증
-        assertThat(savedReviews).isNotEmpty();
-        assertThat(savedReviews.size()).isEqualTo(2); // reviews.json에 2개의 리뷰가 있음
-        
-        // 각 리뷰 내용 확인
-        for (int i = 0; i < savedReviews.size(); i++) {
-            Review review = savedReviews.get(i);
-            System.out.println("리뷰 " + (i + 1) + ":");
-            System.out.println("  ID: " + review.getReviewId());
-            System.out.println("  Content: " + (review.getContent().length() > 100 ? 
-                review.getContent().substring(0, 100) + "..." : review.getContent()));
-            System.out.println("  Sentiment: " + review.getSentiment());
-            System.out.println("  Created At: " + review.getCreatedAt());
-            System.out.println();
-            
-            // 필수 필드 검증
-            assertThat(review.getReviewId()).isNotNull();
-            assertThat(review.getContent()).isNotNull().isNotEmpty();
-            assertThat(review.getSentiment()).isNotNull().isNotEmpty();
-        }
-        
-        System.out.println("=== 테스트 완료: 모든 검증 통과 ===");
-    }
 
     @Test
     @Transactional

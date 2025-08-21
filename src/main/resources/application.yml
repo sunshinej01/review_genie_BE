@@ -3,16 +3,37 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/review_genie
+    url: jdbc:postgresql://localhost:5432/review_genie?characterEncoding=UTF-8&useUnicode=true
     username: kt
     password: kt123
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update # 애플리케이션 실행 시 엔티티에 맞춰 테이블 변경
+      ddl-auto: create # 애플리케이션 실행 시 엔티티에 맞춰 테이블 생성
     show-sql: true
+    properties:
+      hibernate:
+        connection:
+          characterEncoding: UTF-8
+          useUnicode: true
+        jdbc:
+          time_zone: UTC
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+logging:
+  charset:
+    console: UTF-8
+    file: UTF-8
   flyway:
-    enabled: true
+    enabled: false # 초기 데이터 삽입을 위해 일시적으로 비활성화
     locations: classpath:db/migration
     baseline-on-migrate: true
     baseline-version: 0

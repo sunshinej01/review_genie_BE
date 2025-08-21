@@ -1,0 +1,132 @@
+{
+  "data" : [ {
+    "store_id" : 1,
+    "sentiment_id" : 1,
+    "last_updated" : "2025-08-20T15:41:56.6716237",
+    "positive_count" : 4,
+    "negative_count" : 2,
+    "keyword_id" : 1
+  }, {
+    "store_id" : 1,
+    "sentiment_id" : 2,
+    "last_updated" : "2025-08-20T15:41:56.672621",
+    "positive_count" : 5,
+    "negative_count" : 1,
+    "keyword_id" : 2
+  }, {
+    "store_id" : 1,
+    "sentiment_id" : 3,
+    "last_updated" : "2025-08-20T15:41:56.672621",
+    "positive_count" : 7,
+    "negative_count" : 0,
+    "keyword_id" : 3
+  }, {
+    "store_id" : 1,
+    "sentiment_id" : 4,
+    "last_updated" : "2025-08-20T15:41:56.672621",
+    "positive_count" : 21,
+    "negative_count" : 4,
+    "keyword_id" : 4
+  }, {
+    "store_id" : 1,
+    "sentiment_id" : 5,
+    "last_updated" : "2025-08-20T15:41:56.672621",
+    "positive_count" : 2,
+    "negative_count" : 1,
+    "keyword_id" : 5
+  }, {
+    "store_id" : 1,
+    "sentiment_id" : 6,
+    "last_updated" : "2025-08-20T15:41:56.672621",
+    "positive_count" : 1,
+    "negative_count" : 0,
+    "keyword_id" : 6
+  }, {
+    "store_id" : 2,
+    "sentiment_id" : 7,
+    "last_updated" : "2025-08-20T15:41:58.2823834",
+    "positive_count" : 10,
+    "negative_count" : 1,
+    "keyword_id" : 1
+  }, {
+    "store_id" : 2,
+    "sentiment_id" : 8,
+    "last_updated" : "2025-08-20T15:41:58.2823834",
+    "positive_count" : 5,
+    "negative_count" : 1,
+    "keyword_id" : 2
+  }, {
+    "store_id" : 2,
+    "sentiment_id" : 9,
+    "last_updated" : "2025-08-20T15:41:58.2823834",
+    "positive_count" : 9,
+    "negative_count" : 0,
+    "keyword_id" : 3
+  }, {
+    "store_id" : 2,
+    "sentiment_id" : 10,
+    "last_updated" : "2025-08-20T15:41:58.2823834",
+    "positive_count" : 1,
+    "negative_count" : 0,
+    "keyword_id" : 7
+  }, {
+    "store_id" : 2,
+    "sentiment_id" : 11,
+    "last_updated" : "2025-08-20T15:41:58.2823834",
+    "positive_count" : 24,
+    "negative_count" : 4,
+    "keyword_id" : 4
+  }, {
+    "store_id" : 2,
+    "sentiment_id" : 12,
+    "last_updated" : "2025-08-20T15:41:58.2823834",
+    "positive_count" : 2,
+    "negative_count" : 0,
+    "keyword_id" : 5
+  }, {
+    "store_id" : 3,
+    "sentiment_id" : 13,
+    "last_updated" : "2025-08-20T15:41:58.8493608",
+    "positive_count" : 3,
+    "negative_count" : 0,
+    "keyword_id" : 1
+  }, {
+    "store_id" : 3,
+    "sentiment_id" : 14,
+    "last_updated" : "2025-08-20T15:41:58.8493608",
+    "positive_count" : 6,
+    "negative_count" : 2,
+    "keyword_id" : 2
+  }, {
+    "store_id" : 3,
+    "sentiment_id" : 15,
+    "last_updated" : "2025-08-20T15:41:58.8493608",
+    "positive_count" : 12,
+    "negative_count" : 0,
+    "keyword_id" : 3
+  }, {
+    "store_id" : 3,
+    "sentiment_id" : 16,
+    "last_updated" : "2025-08-20T15:41:58.8503535",
+    "positive_count" : 1,
+    "negative_count" : 0,
+    "keyword_id" : 7
+  }, {
+    "store_id" : 3,
+    "sentiment_id" : 17,
+    "last_updated" : "2025-08-20T15:41:58.8503535",
+    "positive_count" : 21,
+    "negative_count" : 5,
+    "keyword_id" : 4
+  }, {
+    "store_id" : 3,
+    "sentiment_id" : 18,
+    "last_updated" : "2025-08-20T15:41:58.8503535",
+    "positive_count" : 5,
+    "negative_count" : 0,
+    "keyword_id" : 5
+  } ],
+  "total_count" : 18,
+  "generated_at" : "2025-08-20T15:42:01.3170088",
+  "table_name" : "core_keyword_sentiment"
+}

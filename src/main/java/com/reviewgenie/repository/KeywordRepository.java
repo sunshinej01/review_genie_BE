@@ -7,14 +7,14 @@ import java.util.Optional;
 public interface KeywordRepository extends JpaRepository<Keyword, Long> {
     
     /**
-     * 단어로 키워드 찾기
+     * 키워드명으로 키워드 찾기
      */
-    Optional<Keyword> findByWord(String word);
+    Optional<Keyword> findByKeywordName(String keywordName);
     
     /**
-     * 단어 존재 여부 확인
+     * 키워드명 존재 여부 확인
      */
-    boolean existsByWord(String word);
+    boolean existsByKeywordName(String keywordName);
 }
 
 

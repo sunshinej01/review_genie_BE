@@ -1,0 +1,23 @@
+{
+  "data" : [
+    {
+      "store_id" : 1,
+      "competitor_store_id" : 2
+    },
+    {
+      "store_id" : 1,
+      "competitor_store_id" : 3
+    },
+    {
+      "store_id" : 2,
+      "competitor_store_id" : 1
+    },
+    {
+      "store_id" : 3,
+      "competitor_store_id" : 1
+    }
+  ],
+  "total_count" : 4,
+  "generated_at" : "2025-08-20T15:42:01.7260787",
+  "table_name" : "competitor"
+}

@@ -1,0 +1,27 @@
+{
+  "data" : [ {
+    "id" : 1,
+    "place_id" : "01",
+    "user_id" : 1,
+    "store_name" : "카페페퍼",
+    "location" : "서울 송파구 100번길",
+    "review_count" : 205
+  }, {
+    "id" : 2,
+    "place_id" : "02",
+    "user_id" : 2,
+    "store_name" : "런던베이글뮤지엄 잠실점",
+    "location" : "서울 송파구 200번길",
+    "review_count" : 200
+  }, {
+    "id" : 3,
+    "place_id" : "03",
+    "user_id" : 3,
+    "store_name" : "파이홀",
+    "location" : "서울 송파구 300번길",
+    "review_count" : 180
+  } ],
+  "total_count" : 3,
+  "generated_at" : "2025-08-20T15:41:59.4224608",
+  "table_name" : "store"
+}

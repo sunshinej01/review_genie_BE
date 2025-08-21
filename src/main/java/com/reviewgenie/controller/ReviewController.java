@@ -8,6 +8,7 @@ import com.reviewgenie.service.KoreanNLPService;
 import com.reviewgenie.service.ReviewBatchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,30 @@ public class ReviewController {
 	}
 	
 	/**
-	 * 텍스트 감정 분석 (한국어/영어 자동 감지)
+	 * 텍스트 감정 분석 (한국어/영어 자동 감지) - GET 요청 지원
+	 */
+	@GetMapping(value = "/analyze/sentiment", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<Map<String, Object>> analyzeSentimentGet(@RequestParam String text) {
+		if (text == null || text.trim().isEmpty()) {
+			return ResponseEntity.badRequest().body(Map.of("error", "텍스트가 필요합니다."));
+		}
+		
+		try {
+			String sentiment = reviewAnalysisService.analyzeSentiment(text);
+			return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(Map.of(
+					"text", text,
+					"sentiment", sentiment,
+					"language", text.matches(".*[ㄱ-ㅎㅏ-ㅣ가-힣].*") ? "KOREAN" : "ENGLISH"
+				));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+		}
+	}
+
+	/**
+	 * 텍스트 감정 분석 (한국어/영어 자동 감지) - POST 요청 지원
 	 */
 	@PostMapping("/analyze/sentiment")
 	public ResponseEntity<Map<String, Object>> analyzeSentiment(@RequestBody Map<String, String> request) {
@@ -59,7 +83,29 @@ public class ReviewController {
 	}
 	
 	/**
-	 * 한국어 키워드 추출
+	 * 한국어 키워드 추출 - GET 요청 지원
+	 */
+	@GetMapping(value = "/analyze/keywords", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<Map<String, Object>> extractKeywordsGet(@RequestParam String text) {
+		if (text == null || text.trim().isEmpty()) {
+			return ResponseEntity.badRequest().body(Map.of("error", "텍스트가 필요합니다."));
+		}
+		
+		try {
+			List<String> keywords = reviewAnalysisService.extractKoreanKeywords(text);
+			return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(Map.of(
+					"text", text,
+					"keywords", keywords
+				));
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+		}
+	}
+
+	/**
+	 * 한국어 키워드 추출 - POST 요청 지원
 	 */
 	@PostMapping("/analyze/keywords")
 	public ResponseEntity<Map<String, Object>> extractKeywords(@RequestBody Map<String, String> request) {
@@ -80,7 +126,26 @@ public class ReviewController {
 	}
 	
 	/**
-	 * 종합 텍스트 분석 (형태소 분석, 감정 분석, 키워드 추출)
+	 * 종합 텍스트 분석 (형태소 분석, 감정 분석, 키워드 추출) - GET 요청 지원
+	 */
+	@GetMapping(value = "/analyze/comprehensive", produces = "application/json;charset=UTF-8")
+	public ResponseEntity<Map<String, Object>> analyzeComprehensiveGet(@RequestParam String text) {
+		if (text == null || text.trim().isEmpty()) {
+			return ResponseEntity.badRequest().body(Map.of("error", "텍스트가 필요합니다."));
+		}
+		
+		try {
+			Map<String, Object> analysis = reviewAnalysisService.analyzeReview(text);
+			return ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_JSON)
+				.body(analysis);
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+		}
+	}
+
+	/**
+	 * 종합 텍스트 분석 (형태소 분석, 감정 분석, 키워드 추출) - POST 요청 지원
 	 */
 	@PostMapping("/analyze/comprehensive")
 	public ResponseEntity<Map<String, Object>> analyzeComprehensive(@RequestBody Map<String, String> request) {
@@ -145,7 +210,8 @@ public class ReviewController {
 	@PostMapping("/analyze/print")
 	public ResponseEntity<Map<String, Object>> analyzeAndPrintReviews() {
 		try {
-			reviewBatchService.analyzeAndPrintReviews();
+			// 프론트엔드 연동에 불필요하여 비활성화
+			// reviewBatchService.analyzeAndPrintReviews();
 			
 			return ResponseEntity.ok(Map.of(
 				"success", true,
