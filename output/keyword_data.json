@@ -1,0 +1,35 @@
+{
+  "data" : [
+    {
+      "id" : 1,
+      "keyword_name" : "포장"
+    },
+    {
+      "id" : 2,
+      "keyword_name" : "메뉴"
+    },
+    {
+      "id" : 3,
+      "keyword_name" : "인테리어"
+    },
+    {
+      "id" : 4,
+      "keyword_name" : "맛"
+    },
+    {
+      "id" : 5,
+      "keyword_name" : "가격"
+    },
+    {
+      "id" : 6,
+      "keyword_name" : "예약"
+    },
+    {
+      "id" : 7,
+      "keyword_name" : "청결"
+    }
+  ],
+  "total_count" : 7,
+  "generated_at" : "2025-08-20T15:42:01.3170088",
+  "table_name" : "keyword"
+}

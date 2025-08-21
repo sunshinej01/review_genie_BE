@@ -1,18 +1,18 @@
 {
   "data" : [ {
-    "password" : "password1",
-    "user_id" : 1,
-    "username" : "Linsey"
+    "id" : 1,
+    "username" : "Linsey",
+    "password" : "password1"
   }, {
-    "password" : "password2",
-    "user_id" : 2,
-    "username" : "Sunshine"
+    "id" : 2,
+    "username" : "Sunshine",
+    "password" : "password2"
   }, {
-    "password" : "password3",
-    "user_id" : 3,
-    "username" : "Joe"
+    "id" : 3,
+    "username" : "Joe",
+    "password" : "password3"
   } ],
   "total_count" : 3,
   "generated_at" : "2025-08-20T15:41:59.0843443",
-  "table_name" : "users"
+  "table_name" : "user"
 }

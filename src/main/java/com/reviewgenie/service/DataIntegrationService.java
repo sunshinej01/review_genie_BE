@@ -90,5 +90,4 @@ public class DataIntegrationService {
             .forEach(reviewRepository::save);
         }
     }
-}
-*/
+}*/

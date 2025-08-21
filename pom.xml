@@ -97,6 +97,12 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 		
+		<!-- Flyway PostgreSQL support -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
+		
 		<!-- Swagger for API documentation -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
@@ -135,6 +141,7 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+					<jvmArguments>-Dfile.encoding=UTF-8 -Duser.language=ko -Duser.country=KR -Dspring.output.ansi.enabled=ALWAYS -Dconsole.encoding=UTF-8</jvmArguments>
 				</configuration>
 			</plugin>
 		</plugins>

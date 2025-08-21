@@ -14,6 +14,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
      */
     @Query("SELECT s FROM Store s WHERE s.placeId = :placeId")
     Optional<Store> findByPlaceId(@Param("placeId") String placeId);
+    
+    /**
+     * storeName으로 Store 조회
+     */
+    Optional<Store> findByStoreName(String storeName);
 }
 
 
